@@ -3,11 +3,11 @@ import {
   UnauthorizedException,
   ConflictException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 import { RegisterRequestDto } from './dto/register.dto';
 import { LoginRequestDto } from './dto/login.dto';
 import * as bcrypt from 'bcryptjs';
-import * as jwt from 'jsonwebtoken';
 import { Usuario } from '@prisma/client';
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment  */
@@ -17,7 +17,10 @@ import { Usuario } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
   async register(registerDto: RegisterRequestDto) {
     const { nome, email, senha } = registerDto;
@@ -106,18 +109,22 @@ export class AuthService {
   }
 
   private generateAccessToken(userId: number): string {
-    return jwt.sign(
+    return this.jwtService.sign(
       { userId, type: 'access' },
-      process.env.JWT_ACCESS_SECRET || 'your-secret-key',
-      { expiresIn: '60m' },
+      {
+        secret: process.env.JWT_ACCESS_SECRET || 'your-secret-key',
+        expiresIn: process.env.ACCESS_TOKEN_DURATION || '60m',
+      },
     );
   }
 
   private generateRefreshToken(): string {
-    return jwt.sign(
+    return this.jwtService.sign(
       { type: 'refresh', timestamp: Date.now() },
-      process.env.JWT_REFRESH_SECRET || 'your-secret-key',
-      { expiresIn: '7d' },
+      {
+        secret: process.env.JWT_REFRESH_SECRET || 'your-secret-key',
+        expiresIn: process.env.REFRESH_TOKEN_DURATION || '7d',
+      },
     );
   }
 }
