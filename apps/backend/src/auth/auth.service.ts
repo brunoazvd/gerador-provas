@@ -36,7 +36,6 @@ export class AuthService {
     // Hash password and refresh token
     const senhaHash = await bcrypt.hash(senha, 12);
     const refreshToken = this.generateRefreshToken();
-    const refreshTokenHash = await bcrypt.hash(refreshToken, 12);
 
     // Create user
     const user = await this.prisma.usuario.create({
@@ -44,7 +43,7 @@ export class AuthService {
         nome,
         email,
         senhaHash,
-        refreshTokenHash,
+        refreshTokenHash: refreshToken,
       },
       select: {
         id: true,
@@ -85,12 +84,11 @@ export class AuthService {
 
     // Generate new refresh token and hash it
     const refreshToken = this.generateRefreshToken();
-    const refreshTokenHash = await bcrypt.hash(refreshToken, 12);
 
     // Update user with new refresh token hash
     await this.prisma.usuario.update({
       where: { id: user.id },
-      data: { refreshTokenHash },
+      data: { refreshTokenHash: refreshToken },
     });
 
     // Generate access token
@@ -126,5 +124,29 @@ export class AuthService {
         expiresIn: process.env.REFRESH_TOKEN_DURATION || '7d',
       },
     );
+  }
+
+  async refreshAccessToken(refreshToken: string): Promise<string> {
+    try {
+      const payload = await this.jwtService.verifyAsync(refreshToken, {
+        secret: process.env.JWT_REFRESH_SECRET || 'your-secret-key',
+      });
+
+      if (payload.type !== 'refresh') {
+        throw new UnauthorizedException('Tipo de token inválido');
+      }
+
+      const user = await this.prisma.usuario.findUnique({
+        where: { refreshTokenHash: refreshToken },
+      });
+
+      if (!user) {
+        throw new UnauthorizedException('Refresh token inválido');
+      }
+
+      return this.generateAccessToken(user.id);
+    } catch (err) {
+      throw new UnauthorizedException(err);
+    }
   }
 }

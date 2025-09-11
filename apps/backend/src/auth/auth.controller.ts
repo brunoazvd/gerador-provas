@@ -6,11 +6,15 @@ import {
   HttpStatus,
   Res,
   Get,
+  UseGuards,
+  Request,
+  UnauthorizedException,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterRequestDto, RegisterResponseDto } from './dto/register.dto';
 import { LoginRequestDto, LoginResponseDto } from './dto/login.dto';
+import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 
 /* eslint-disable @typescript-eslint/no-unsafe-assignment  */
 
@@ -25,17 +29,16 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<RegisterResponseDto> {
     const result = await this.authService.register(registerDto);
-    // Set access token as httpOnly cookie
-    res.cookie('accessToken', result.accessToken, {
+    res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 60 * 60 * 1000, // 60 minutes
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
     });
 
     return {
       user: result.user,
-      refreshToken: result.refreshToken,
+      accessToken: result.accessToken,
     };
   }
 
@@ -46,25 +49,41 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<LoginResponseDto> {
     const result = await this.authService.login(loginDto);
-    // Set access token as httpOnly cookie
-    res.cookie('accessToken', result.accessToken, {
+    res.cookie('refreshToken', result.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 60 * 60 * 1000, // 60 minutes
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
     });
 
     return {
       user: result.user,
-      refreshToken: result.refreshToken,
+      accessToken: result.accessToken,
     };
   }
 
-  @Get('health')
+  @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  getHealth(): object {
+  async refresh(
+    @Request() req: { cookies: { refreshToken: string } },
+  ): Promise<{ accessToken: string }> {
+    const refreshToken = req.cookies?.refreshToken;
+
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token não encontrado');
+    }
+
+    const accessToken = await this.authService.refreshAccessToken(refreshToken);
+    return { accessToken };
+  }
+
+  @Get('protected')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  getProtected(@Request() req: { user: any }): object {
     return {
-      message: 'OK',
+      message: 'This resource is available only for authenticated users.',
+      user: req.user,
     };
   }
 }

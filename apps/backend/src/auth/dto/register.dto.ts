@@ -31,5 +31,5 @@ export class RegisterResponseDto {
     email: string;
     criadoEm: Date;
   };
-  refreshToken: string;
+  accessToken: string;
 }

@@ -12,7 +12,7 @@ model Usuario {
   nome             String
   email            String   @unique
   senhaHash        String
-  refreshTokenHash String?
+  refreshTokenHash String?  @unique
   provas           Prova[]
   criadoEm         DateTime @default(now())
 }

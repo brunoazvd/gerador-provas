@@ -26,5 +26,5 @@ export class LoginResponseDto {
     email: string;
     criadoEm: Date;
   };
-  refreshToken: string;
+  accessToken: string;
 }
