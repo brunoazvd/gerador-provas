@@ -8,12 +8,10 @@ import { PrismaService } from '../prisma/prisma.service';
 import { RegisterRequestDto } from './dto/register.dto';
 import { LoginRequestDto } from './dto/login.dto';
 import * as bcrypt from 'bcryptjs';
-import { Usuario } from '@prisma/client';
+import { RefreshResponseDto } from './dto/refresh.dto';
+import type { UserSelect } from './types/auth.types';
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment  */
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents  */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access  */
-/* eslint-disable @typescript-eslint/no-unsafe-argument  */
 
 @Injectable()
 export class AuthService {
@@ -22,12 +20,19 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async register(registerDto: RegisterRequestDto) {
+  async register(registerDto: RegisterRequestDto): Promise<{
+    user: UserSelect;
+    accessToken: string;
+    refreshToken: string;
+  }> {
     const { nome, email, senha } = registerDto;
 
-    const existingUser: Usuario | null = await this.prisma.usuario.findUnique({
+    const existingUser = (await this.prisma.usuario.findUnique({
       where: { email },
-    });
+      select: {
+        id: true,
+      },
+    })) as UserSelect | null;
 
     if (existingUser) {
       throw new ConflictException('Email já está em uso');
@@ -38,7 +43,7 @@ export class AuthService {
     const refreshToken = this.generateRefreshToken();
 
     // Create user
-    const user = await this.prisma.usuario.create({
+    const user = (await this.prisma.usuario.create({
       data: {
         nome,
         email,
@@ -49,9 +54,8 @@ export class AuthService {
         id: true,
         nome: true,
         email: true,
-        criadoEm: true,
       },
-    });
+    })) as UserSelect;
 
     // Generate access token
     const accessToken = this.generateAccessToken(user.id);
@@ -63,20 +67,28 @@ export class AuthService {
     };
   }
 
-  async login(loginDto: LoginRequestDto) {
+  async login(
+    loginDto: LoginRequestDto,
+  ): Promise<{ user: UserSelect; accessToken: string; refreshToken: string }> {
     const { email, senha } = loginDto;
 
     // Find user
-    const user = await this.prisma.usuario.findUnique({
+    const user = (await this.prisma.usuario.findUnique({
       where: { email },
-    });
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+        senhaHash: true,
+      },
+    })) as UserSelect | null;
 
     if (!user) {
       throw new UnauthorizedException('Credenciais inválidas');
     }
 
     // Verify password
-    const isPasswordValid = await bcrypt.compare(senha, user.senhaHash);
+    const isPasswordValid = await bcrypt.compare(senha, user.senhaHash || '');
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Credenciais inválidas');
@@ -99,7 +111,6 @@ export class AuthService {
         id: user.id,
         nome: user.nome,
         email: user.email,
-        criadoEm: user.criadoEm,
       },
       accessToken,
       refreshToken,
@@ -126,27 +137,46 @@ export class AuthService {
     );
   }
 
-  async refreshAccessToken(refreshToken: string): Promise<string> {
+  async refreshAccessToken(
+    refreshToken: string,
+    includeUser = false,
+  ): Promise<RefreshResponseDto> {
     try {
-      const payload = await this.jwtService.verifyAsync(refreshToken, {
-        secret: process.env.JWT_REFRESH_SECRET || 'your-secret-key',
-      });
-
-      if (payload.type !== 'refresh') {
-        throw new UnauthorizedException('Tipo de token inválido');
-      }
-
-      const user = await this.prisma.usuario.findUnique({
+      const user = (await this.prisma.usuario.findUnique({
         where: { refreshTokenHash: refreshToken },
-      });
+        select: {
+          id: true,
+          nome: true,
+          email: true,
+        },
+      })) as UserSelect | null;
 
       if (!user) {
         throw new UnauthorizedException('Refresh token inválido');
       }
 
-      return this.generateAccessToken(user.id);
+      const accessToken = this.generateAccessToken(user.id);
+
+      return includeUser ? { accessToken, user } : { accessToken };
     } catch (err) {
       throw new UnauthorizedException(err);
     }
+  }
+
+  async getUserById(userId: number): Promise<UserSelect | null> {
+    const user = (await this.prisma.usuario.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        nome: true,
+        email: true,
+      },
+    })) as UserSelect | null;
+
+    if (!user) {
+      throw new UnauthorizedException('Usuário não encontrado');
+    }
+
+    return user;
   }
 }

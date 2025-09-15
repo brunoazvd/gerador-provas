@@ -29,7 +29,6 @@ export class RegisterResponseDto {
     id: number;
     nome: string;
     email: string;
-    criadoEm: Date;
   };
   accessToken: string;
 }

@@ -9,14 +9,26 @@ import {
   UseGuards,
   Request,
   UnauthorizedException,
+  Query,
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterRequestDto, RegisterResponseDto } from './dto/register.dto';
 import { LoginRequestDto, LoginResponseDto } from './dto/login.dto';
+import { RefreshRequestDto, RefreshResponseDto } from './dto/refresh.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import { parseTimeToMs } from '../common/helpers/time-parser';
+import { CookieOptions } from 'express';
+import type { UserSelect, AuthenticatedRequest } from './types/auth.types';
 
-/* eslint-disable @typescript-eslint/no-unsafe-assignment  */
+const getCookieOptions = (cookieDuration: string): CookieOptions => {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: parseTimeToMs(cookieDuration),
+  };
+};
 
 @Controller('auth')
 export class AuthController {
@@ -29,12 +41,10 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<RegisterResponseDto> {
     const result = await this.authService.register(registerDto);
-    res.cookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
-    });
+    const cookieOptions = getCookieOptions(
+      process.env.REFRESH_TOKEN_DURATION || '7d',
+    );
+    res.cookie('refreshToken', result.refreshToken, cookieOptions);
 
     return {
       user: result.user,
@@ -49,12 +59,10 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ): Promise<LoginResponseDto> {
     const result = await this.authService.login(loginDto);
-    res.cookie('refreshToken', result.refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
-    });
+    const cookieOptions = getCookieOptions(
+      process.env.REFRESH_TOKEN_DURATION || '7d',
+    );
+    res.cookie('refreshToken', result.refreshToken, cookieOptions);
 
     return {
       user: result.user,
@@ -65,22 +73,34 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   async refresh(
-    @Request() req: { cookies: { refreshToken: string } },
-  ): Promise<{ accessToken: string }> {
+    @Request() req: RefreshRequestDto,
+    @Query('includeUser') includeUser?: string,
+  ): Promise<RefreshResponseDto> {
     const refreshToken = req.cookies?.refreshToken;
 
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token não encontrado');
     }
+    const result = await this.authService.refreshAccessToken(
+      refreshToken,
+      includeUser === 'true',
+    );
+    return result;
+  }
 
-    const accessToken = await this.authService.refreshAccessToken(refreshToken);
-    return { accessToken };
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async me(@Request() req: AuthenticatedRequest): Promise<UserSelect | null> {
+    const userId = req.user.userId;
+    const user = await this.authService.getUserById(userId);
+    return user;
   }
 
   @Get('protected')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  getProtected(@Request() req: { user: any }): object {
+  getProtected(@Request() req: AuthenticatedRequest): object {
     return {
       message: 'This resource is available only for authenticated users.',
       user: req.user,
