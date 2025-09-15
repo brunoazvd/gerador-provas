@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { ValidationExceptionFilter } from './common/filters/validation-exception.filter';
+import { AuthExceptionFilter } from './common/filters/auth-exception.filter';
 import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
@@ -18,7 +19,10 @@ async function bootstrap() {
     }),
   );
 
-  app.useGlobalFilters(new ValidationExceptionFilter());
+  app.useGlobalFilters(
+    new ValidationExceptionFilter(),
+    new AuthExceptionFilter(),
+  );
 
   await app.listen(process.env.PORT ?? 3000);
 }

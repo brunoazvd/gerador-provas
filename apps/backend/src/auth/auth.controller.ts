@@ -16,6 +16,8 @@ import { AuthService } from './auth.service';
 import { RegisterRequestDto, RegisterResponseDto } from './dto/register.dto';
 import { LoginRequestDto, LoginResponseDto } from './dto/login.dto';
 import { RefreshRequestDto, RefreshResponseDto } from './dto/refresh.dto';
+import { MeResponseDto } from './dto/me.dto';
+import { LogoutResponseDto } from './dto/logout.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { parseTimeToMs } from '../common/helpers/time-parser';
 import { CookieOptions } from 'express';
@@ -91,7 +93,9 @@ export class AuthController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  async me(@Request() req: AuthenticatedRequest): Promise<UserSelect | null> {
+  async me(
+    @Request() req: AuthenticatedRequest,
+  ): Promise<MeResponseDto | null> {
     const userId = req.user.userId;
     const user = await this.authService.getUserById(userId);
     return user;
@@ -103,7 +107,7 @@ export class AuthController {
   async logout(
     @Request() req: AuthenticatedRequest,
     @Res({ passthrough: true }) res: Response,
-  ): Promise<{ message: string }> {
+  ): Promise<LogoutResponseDto> {
     const userId = req.user.userId;
     await this.authService.logout(userId);
     res.clearCookie('refreshToken', {
@@ -112,15 +116,5 @@ export class AuthController {
       sameSite: 'strict',
     });
     return { message: 'Logout realizado com sucesso' };
-  }
-
-  @Get('protected')
-  @UseGuards(JwtAuthGuard)
-  @HttpCode(HttpStatus.OK)
-  getProtected(@Request() req: AuthenticatedRequest): object {
-    return {
-      message: 'This resource is available only for authenticated users.',
-      user: req.user,
-    };
   }
 }
