@@ -97,6 +97,23 @@ export class AuthController {
     return user;
   }
 
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async logout(
+    @Request() req: AuthenticatedRequest,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<{ message: string }> {
+    const userId = req.user.userId;
+    await this.authService.logout(userId);
+    res.clearCookie('refreshToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    });
+    return { message: 'Logout realizado com sucesso' };
+  }
+
   @Get('protected')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)

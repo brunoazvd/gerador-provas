@@ -179,4 +179,11 @@ export class AuthService {
 
     return user;
   }
+
+  async logout(userId: number): Promise<void> {
+    await this.prisma.usuario.update({
+      where: { id: userId },
+      data: { refreshTokenHash: null },
+    });
+  }
 }
