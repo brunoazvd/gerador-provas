@@ -11,8 +11,6 @@ import * as bcrypt from 'bcryptjs';
 import { RefreshResponseDto } from './dto/refresh.dto';
 import type { UserSelect } from './types/auth.types';
 
-/* eslint-disable @typescript-eslint/no-unsafe-member-access  */
-
 @Injectable()
 export class AuthService {
   constructor(

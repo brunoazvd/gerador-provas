@@ -21,7 +21,7 @@ import { LogoutResponseDto } from './dto/logout.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { parseTimeToMs } from '../common/helpers/time-parser';
 import { CookieOptions } from 'express';
-import type { UserSelect, AuthenticatedRequest } from './types/auth.types';
+import type { AuthenticatedRequest } from './types/auth.types';
 
 const getCookieOptions = (cookieDuration: string): CookieOptions => {
   return {
