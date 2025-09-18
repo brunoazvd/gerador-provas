@@ -10,6 +10,7 @@ import { LoginRequestDto } from './dto/login.dto';
 import * as bcrypt from 'bcryptjs';
 import { RefreshResponseDto } from './dto/refresh.dto';
 import type { UserSelect } from './types/auth.types';
+import { ERROR_MESSAGES } from '@shared/enums/error-messages';
 
 @Injectable()
 export class AuthService {
@@ -33,7 +34,7 @@ export class AuthService {
     })) as UserSelect | null;
 
     if (existingUser) {
-      throw new ConflictException('Email já está em uso');
+      throw new ConflictException(ERROR_MESSAGES.EMAIL_ALREADY_IN_USE);
     }
 
     // Hash password and refresh token
@@ -82,14 +83,14 @@ export class AuthService {
     })) as UserSelect | null;
 
     if (!user) {
-      throw new UnauthorizedException('Credenciais inválidas');
+      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
 
     // Verify password
     const isPasswordValid = await bcrypt.compare(senha, user.senhaHash || '');
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Credenciais inválidas');
+      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
     }
 
     // Generate new refresh token and hash it
@@ -150,7 +151,7 @@ export class AuthService {
       })) as UserSelect | null;
 
       if (!user) {
-        throw new UnauthorizedException('Refresh token inválido');
+        throw new UnauthorizedException(ERROR_MESSAGES.REFRESH_TOKEN_INVALID);
       }
 
       const accessToken = this.generateAccessToken(user.id);
@@ -172,7 +173,7 @@ export class AuthService {
     })) as UserSelect | null;
 
     if (!user) {
-      throw new UnauthorizedException('Usuário não encontrado');
+      throw new UnauthorizedException(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
     return user;

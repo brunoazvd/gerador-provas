@@ -3,6 +3,7 @@ import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+import path from 'path';
 
 export default tseslint.config(
   {
@@ -21,8 +22,17 @@ export default tseslint.config(
       parserOptions: {
         projectService: true,
         tsconfigRootDir: import.meta.dirname,
+        project: path.resolve(__dirname, './tsconfig.json')
       },
     },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: path.resolve(__dirname, './tsconfig.json'),
+          alwaysTryTypes: true,
+        }
+      }
+    }
   },
   {
     rules: {

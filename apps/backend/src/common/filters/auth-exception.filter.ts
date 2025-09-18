@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { ERROR_MESSAGES } from '@shared/enums/error-messages';
 
 @Catch(UnauthorizedException)
 export class AuthExceptionFilter implements ExceptionFilter {
@@ -19,21 +20,21 @@ export class AuthExceptionFilter implements ExceptionFilter {
       case 'TOKEN_EXPIRED':
         errorResponse = {
           code: 'TOKEN_EXPIRED',
-          message: 'Token expirado',
+          message: ERROR_MESSAGES.TOKEN_EXPIRED,
           statusCode: 401,
         };
         break;
       case 'INVALID_TOKEN_TYPE':
         errorResponse = {
           code: 'INVALID_TOKEN_TYPE',
-          message: 'Tipo de token inválido',
+          message: ERROR_MESSAGES.INVALID_TOKEN_TYPE,
           statusCode: 401,
         };
         break;
       default:
         errorResponse = {
           code: 'UNAUTHORIZED',
-          message: message || 'Não autorizado',
+          message: message || ERROR_MESSAGES.UNAUTHORIZED,
           statusCode: 401,
         };
     }

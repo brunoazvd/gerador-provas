@@ -22,6 +22,8 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { parseTimeToMs } from '../common/helpers/time-parser';
 import { CookieOptions } from 'express';
 import type { AuthenticatedRequest } from './types/auth.types';
+import { ERROR_MESSAGES } from '@shared/enums/error-messages';
+import { SUCCESS_MESSAGES } from '@shared/enums/success-messages';
 
 const getCookieOptions = (cookieDuration: string): CookieOptions => {
   return {
@@ -81,7 +83,7 @@ export class AuthController {
     const refreshToken = req.cookies?.refreshToken;
 
     if (!refreshToken) {
-      throw new UnauthorizedException('Refresh token não encontrado');
+      throw new UnauthorizedException(ERROR_MESSAGES.REFRESH_TOKEN_NOT_FOUND);
     }
     const result = await this.authService.refreshAccessToken(
       refreshToken,
@@ -115,6 +117,6 @@ export class AuthController {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
     });
-    return { message: 'Logout realizado com sucesso' };
+    return { message: SUCCESS_MESSAGES.LOGOUT };
   }
 }
