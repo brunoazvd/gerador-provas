@@ -10,7 +10,7 @@ import { LoginRequestDto } from './dto/login.dto';
 import * as bcrypt from 'bcryptjs';
 import { RefreshResponseDto } from './dto/refresh.dto';
 import type { UserSelect } from './types/auth.types';
-import { ERROR_MESSAGES } from '@shared/enums/error-messages';
+import { ERROR_MESSAGES } from '@app/shared';
 
 @Injectable()
 export class AuthService {

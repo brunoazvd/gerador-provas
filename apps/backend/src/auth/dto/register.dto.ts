@@ -1,25 +1,29 @@
 import {
-  IsEmail,
   IsString,
   MinLength,
   MaxLength,
   Matches,
 } from 'class-validator';
+import { ERROR_MESSAGES } from '@app/shared';
 
 export class RegisterRequestDto {
-  @IsString({ message: 'Nome deve ser uma string válida.' })
-  @MinLength(3, { message: 'Nome deve ter pelo menos 3 caracteres.' })
-  @MaxLength(32, { message: 'Nome deve ter no máximo 32 caracteres.' })
+  @IsString({ message: ERROR_MESSAGES.INVALID_NAME_FORMAT })
+  @MinLength(3, { message: ERROR_MESSAGES.INVALID_NAME })
+  @MaxLength(32, { message: ERROR_MESSAGES.INVALID_NAME })
+  @Matches(/^(?!.*[ \-']{2})(?!.*[ \-']$)(?!^[ \-'])[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ \-'][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/, {
+    message: () => ERROR_MESSAGES.INVALID_NAME,
+  })
   nome: string;
 
-  @IsEmail({}, { message: 'Email deve ter um formato válido.' })
+  @IsString({ message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT })
+  @Matches(/^(?!.*\.\.)[A-Za-z0-9](?:[A-Za-z0-9._+-]*[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z]{2,})+$/, { message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT })
   email: string;
 
-  @IsString({ message: 'Senha deve ser uma string válida.' })
-  @MinLength(8, { message: 'Senha deve ter pelo menos 8 caracteres.' })
-  @MaxLength(64, { message: 'Senha deve ter no máximo 64 caracteres.' })
-  @Matches(/^(?=.*\d)/, {
-    message: 'Senha deve conter pelo menos um dígito',
+  @IsString({ message: ERROR_MESSAGES.INVALID_PASSWORD_FORMAT })
+  @MinLength(8, { message: ERROR_MESSAGES.INVALID_PASSWORD })
+  @MaxLength(64, { message: ERROR_MESSAGES.INVALID_PASSWORD })
+  @Matches(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])\S{8,64}$/, {
+    message: ERROR_MESSAGES.INVALID_PASSWORD,
   })
   senha: string;
 }

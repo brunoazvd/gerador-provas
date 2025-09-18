@@ -26,7 +26,6 @@
       "@common/*": ["./src/common/*"],
       "@auth/*": ["./src/auth/*"],
       "@prisma-module/*": ["./src/prisma/*"],
-      "@shared/*": ["../../shared/*"]
     }
   }
 }

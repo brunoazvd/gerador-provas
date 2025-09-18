@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ERROR_MESSAGES = void 0;
+exports.ERROR_MESSAGES = {
+    EMAIL_ALREADY_IN_USE: 'Email já está em uso',
+    INVALID_CREDENTIALS: 'Credenciais inválidas',
+    USER_NOT_FOUND: 'Usuário não encontrado',
+    REFRESH_TOKEN_INVALID: 'Refresh token inválido',
+    REFRESH_TOKEN_NOT_FOUND: 'Refresh token não encontrado',
+    TOKEN_EXPIRED: 'Refresh token expirado',
+    UNAUTHORIZED: 'Não autorizado',
+    INVALID_TOKEN_TYPE: 'Tipo de token inválido',
+    INVALID_EMAIL_FORMAT: 'Email deve ter um formato válido.',
+    INVALID_PASSWORD: 'Senha deve ter entre 8 e 64 caracteres e conter pelo menos um dígito',
+    INVALID_PASSWORD_FORMAT: 'Senha deve ser uma string válida.',
+    INVALID_NAME: 'Nome deve ter entre 3 e 32 caracteres e conter apenas letras e espaços.',
+    INVALID_NAME_FORMAT: 'Nome deve ser uma string válida.',
+};

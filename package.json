@@ -3,7 +3,8 @@
 	"version": "0.1",
 	"workspaces": [
 		"apps/backend",
-		"apps/frontend"
+		"apps/frontend",
+		"shared"
 	],
 	"engines": {
 		"node": "22.x.x",

@@ -11,7 +11,6 @@
     "@src/(.*)": "<rootDir>/src/$1",
     "@common/(.*)": "<rootDir>/src/common/$1",
     "@auth/(.*)": "<rootDir>/src/auth/$1",
-    "@prisma-module/(.*)": "<rootDir>/src/prisma/$1",
-    "@shared/(.*)": "<rootDir>/../../shared/$1"
+    "@prisma-module/(.*)": "<rootDir>/src/prisma/$1"
   }
 }

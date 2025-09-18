@@ -22,8 +22,7 @@ import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { parseTimeToMs } from '../common/helpers/time-parser';
 import { CookieOptions } from 'express';
 import type { AuthenticatedRequest } from './types/auth.types';
-import { ERROR_MESSAGES } from '@shared/enums/error-messages';
-import { SUCCESS_MESSAGES } from '@shared/enums/success-messages';
+import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@app/shared';
 
 const getCookieOptions = (cookieDuration: string): CookieOptions => {
   return {

@@ -20,7 +20,7 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     // Customizar formato do erro
     const errorResponse = {
       error: 'Validation',
-      details: Array.isArray(exceptionResponse.message)
+      message: Array.isArray(exceptionResponse.message)
         ? exceptionResponse.message[0]
         : exceptionResponse.message,
       statusCode: status,

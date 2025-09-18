@@ -5,7 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { ERROR_MESSAGES } from '@shared/enums/error-messages';
+import { ERROR_MESSAGES } from '@app/shared';
 
 @Catch(UnauthorizedException)
 export class AuthExceptionFilter implements ExceptionFilter {
