@@ -11,6 +11,9 @@
     "@src/(.*)": "<rootDir>/src/$1",
     "@common/(.*)": "<rootDir>/src/common/$1",
     "@auth/(.*)": "<rootDir>/src/auth/$1",
-    "@prisma-module/(.*)": "<rootDir>/src/prisma/$1"
-  }
+    "@prisma-module/(.*)": "<rootDir>/src/prisma/$1",
+    "@specs/(.*)": "<rootDir>/test/specs/$1",
+    "@factories/(.*)": "<rootDir>/test/factories/$1"
+  },
+  "setupFilesAfterEnv": ["<rootDir>/test/setup-e2e.ts"]
 }

@@ -26,6 +26,8 @@
       "@common/*": ["./src/common/*"],
       "@auth/*": ["./src/auth/*"],
       "@prisma-module/*": ["./src/prisma/*"],
+      "@specs/*": ["./test/specs/*"],
+      "@factories/*": ["./test/factories/*"]
     }
   }
 }

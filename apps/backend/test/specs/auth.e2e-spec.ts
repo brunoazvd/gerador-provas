@@ -1,16 +1,13 @@
 import request from 'supertest';
-import { Test } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { ValidationExceptionFilter } from '@common/filters/validation-exception.filter';
-import { AuthExceptionFilter } from '@common/filters/auth-exception.filter';
+import { INestApplication } from '@nestjs/common';
 import { Server } from 'http';
-import { AppModule } from '@src/app.module';
-import { PrismaService } from '@prisma-module/prisma.service';
 import {
   AuthSuccessResponse,
   AuthConflictErrorResponse,
 } from '../response-types';
 import { ERROR_MESSAGES } from '@app/shared';
+import { getApp } from '../setup-e2e';
+import { makeRegisterDto } from '@factories/auth.factory';
 
 const invalidFormats = [
   true,
@@ -23,162 +20,109 @@ const invalidFormats = [
   () => 'teste'
 ]
 
-describe('AuthController (e2e)', () => {
+const invalidEmails = [
+  'invalid-format',
+  'nodomain@',
+  'onlysubdomain@.com',
+  'domain.ends.with.dot@.com.',
+  'domain.starts.with.dot@.com.com',
+  'multiple-ats@.com@.com',
+  '.local.starts.with.dot@test.com',
+  'local.ends.with.dot.@test.com',
+  '-local.starts.with.hyphen@test.com',
+  'local.ends.with.hyphen-@test.com',
+  'special#character$@test.com',
+  'contains space@test.com',
+  ...invalidFormats
+];
+
+const invalidNames = [
+  ' João',
+  'Espaço  Repetido',
+  'Hyphen--Repetido',
+  "Apostrofo''repetido",
+  'Sou #Especial',
+  'Мария',
+  'Gabe69',
+  ...invalidFormats
+];
+
+const invalidPasswords = [
+  '123',
+  'nodigitsss',
+  'abc123',
+  'a2b4c'.repeat(13),
+  ...invalidFormats
+];
+
+describe('register', () => {
   let app: INestApplication<Server>;
-  let prisma: PrismaService;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleRef.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }));
-
-    app.useGlobalFilters(
-        new ValidationExceptionFilter(),
-        new AuthExceptionFilter(),
-      );
-    await app.init();
-    prisma = app.get(PrismaService);
+    app = getApp();
   });
 
-  afterAll(async () => {
-    await app.close();
-    await prisma.$disconnect();
+  it('deve criar um usuário com sucesso', async () => {
+    const dto = makeRegisterDto();
+
+    const response: AuthSuccessResponse = await request(app.getHttpServer())
+      .post('/auth/register')
+      .send(dto);
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty('user');
+    expect(response.body).toHaveProperty('accessToken');
+    expect(response.body.user.email).toBe(dto.email);
+    expect(response.body.user.nome).toBe(dto.nome);
   });
 
+  it('deve lançar erro de conflito se o email já existir', async () => {
+    const dto = makeRegisterDto();
 
-  describe('register', () => {
-    it('deve criar um usuário com sucesso', async () => {
-      const registerDto = {
-        nome: 'Usuario Teste',
-        email: 'teste@teste.com',
-        senha: 'Senha123',
-      };
-  
-      const response: AuthSuccessResponse = await request(app.getHttpServer())
-        .post('/auth/register')
-        .send(registerDto);
-  
-      expect(response.status).toBe(201);
-      expect(response.body).toHaveProperty('user');
-      expect(response.body).toHaveProperty('accessToken');
-      expect(response.body.user.email).toBe(registerDto.email);
-      expect(response.body.user.nome).toBe(registerDto.nome);
-    });
-  
-    it('deve lançar erro de conflito se o email já existir', async () => {
-      const registerDto = {
-        nome: 'Usuario Teste',
-        email: 'teste@teste.com',
-        senha: 'Senha123',
-      };
-  
-      const response: AuthConflictErrorResponse = await request(
-        app.getHttpServer(),
-      )
-        .post('/auth/register')
-        .send(registerDto);
-  
-      expect(response.status).toBe(409);
-      expect(response.body.message).toBe(ERROR_MESSAGES.EMAIL_ALREADY_IN_USE);
-    });
-  
-    it('deve lançar erro se email for de formato inválido', async () => {
-      const invalidEmails = [
-        'invalid-format',
-        'nodomain@',
-        'onlysubdomain@.com',
-        'domain.ends.with.dot@.com.',
-        'domain.starts.with.dot@.com.com',
-        'multiple-ats@.com@.com',
-        '.local.starts.with.dot@test.com',
-        'local.ends.with.dot.@test.com',
-        '-local.starts.with.hyphen@test.com',
-        'local.ends.with.hyphen-@test.com',
-        'special#character$@test.com',
-        'contains space@test.com',
-        ...invalidFormats
-      ];
+    const response: AuthConflictErrorResponse = await request(
+      app.getHttpServer(),
+    )
+      .post('/auth/register')
+      .send(dto);
 
-      for (const email of invalidEmails) {
-        const registerDto = {
-          nome: 'Usuario Teste',
-          email: email,
-          senha: 'senha123',
-        };
-  
-        const response: AuthConflictErrorResponse = await request(
-          app.getHttpServer(),
-        )
-          .post('/auth/register')
-          .send(registerDto);
+    expect(response.status).toBe(409);
+    expect(response.body.message).toBe(ERROR_MESSAGES.EMAIL_ALREADY_IN_USE);
+  });
 
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe(ERROR_MESSAGES.INVALID_EMAIL_FORMAT);
-      };
-    });
+  it.each(invalidEmails)('deve lançar erro se email for de formato inválido: %s', async (invalidEmail: any) => {
+    const dto = makeRegisterDto({email: invalidEmail});
+    const response: AuthConflictErrorResponse = await request(
+      app.getHttpServer(),
+    )
+      .post('/auth/register')
+      .send(dto);
 
-    it('deve lançar erro se nome for de formato inválido', async () => {
-      const invalidNames = [
-        ' João',
-        'Espaço  Repetido',
-        'Hyphen--Repetido',
-        "Apostrofo''repetido",
-        'Sou #Especial',
-        'Мария',
-        'Gabe69',
-        ...invalidFormats
-      ];
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe(ERROR_MESSAGES.INVALID_EMAIL_FORMAT);
+  });
 
-      for (const name of invalidNames) {
-        const registerDto = {
-          nome: name,
-          email: 'nao@importa.com',
-          senha: 'senha123',
-        };
-  
-        const response: AuthConflictErrorResponse = await request(
-          app.getHttpServer(),
-        )
-          .post('/auth/register')
-          .send(registerDto);
+  it.each(invalidNames)('deve lançar erro se nome for de formato inválido: %s', async (invalidName: any) => {
+    const dto = makeRegisterDto({nome: invalidName});
+    const response: AuthConflictErrorResponse = await request(
+      app.getHttpServer(),
+    )
+      .post('/auth/register')
+      .send(dto);
 
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe(ERROR_MESSAGES.INVALID_NAME);
-      };
-    });
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe(ERROR_MESSAGES.INVALID_NAME);
+  });
 
-    it('deve lançar erro se senha for de formato inválido', async () => {
-      const invalidPasswords = [
-        '123',
-        'nodigitsss',
-        'abc123',
-        'a2b4c'.repeat(13),
-        ...invalidFormats
-      ];
+  it.each(invalidPasswords)('deve lançar erro se senha for de formato inválido: %s', async (invalidPassword: any) => {
+    const dto = makeRegisterDto({senha: invalidPassword});
 
-      for (const password of invalidPasswords) {
-        const registerDto = {
-          nome: 'Usuario Teste',
-          email: 'nao@importa.com',
-          senha: password,
-        };
-  
-        const response: AuthConflictErrorResponse = await request(
-          app.getHttpServer(),
-        )
-          .post('/auth/register')
-          .send(registerDto);
+    const response: AuthConflictErrorResponse = await request(
+      app.getHttpServer(),
+    )
+      .post('/auth/register')
+      .send(dto);
 
-        expect(response.status).toBe(400);
-        expect(response.body.message).toBe(ERROR_MESSAGES.INVALID_PASSWORD);
-      };
-    });
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe(ERROR_MESSAGES.INVALID_PASSWORD);
   });
 });
