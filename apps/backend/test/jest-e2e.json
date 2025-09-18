@@ -1,7 +1,7 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": "..",
-  "globalSetup": "./test/setup.ts",
+  "globalSetup": "./test/setup-env.ts",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
@@ -13,7 +13,9 @@
     "@auth/(.*)": "<rootDir>/src/auth/$1",
     "@prisma-module/(.*)": "<rootDir>/src/prisma/$1",
     "@specs/(.*)": "<rootDir>/test/specs/$1",
-    "@factories/(.*)": "<rootDir>/test/factories/$1"
+    "@factories/(.*)": "<rootDir>/test/factories/$1",
+    "@test-data/(.*)": "<rootDir>/test/data/$1",
+    "@test-helpers/(.*)": "<rootDir>/test/helpers/$1"
   },
   "setupFilesAfterEnv": ["<rootDir>/test/setup-e2e.ts"]
 }

@@ -27,7 +27,10 @@
       "@auth/*": ["./src/auth/*"],
       "@prisma-module/*": ["./src/prisma/*"],
       "@specs/*": ["./test/specs/*"],
-      "@factories/*": ["./test/factories/*"]
+      "@factories/*": ["./test/factories/*"],
+      "@test-data/*": ["./test/data/*"],
+      "@test-helpers/*": ["./test/helpers/*"],
+      "@test-types/*": ["./test/types/*"]
     }
   }
 }
