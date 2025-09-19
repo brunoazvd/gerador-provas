@@ -83,14 +83,14 @@ export class AuthService {
     })) as UserSelect | null;
 
     if (!user) {
-      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
+      throw new UnauthorizedException('INVALID_CREDENTIALS');
     }
 
     // Verify password
     const isPasswordValid = await bcrypt.compare(senha, user.senhaHash || '');
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException(ERROR_MESSAGES.INVALID_CREDENTIALS);
+      throw new UnauthorizedException('INVALID_CREDENTIALS');
     }
 
     // Generate new refresh token and hash it
@@ -118,7 +118,7 @@ export class AuthService {
 
   private generateAccessToken(userId: number): string {
     return this.jwtService.sign(
-      { userId, type: 'access' },
+      { userId, type: 'access', timestamp: Date.now() },
       {
         secret: process.env.JWT_ACCESS_SECRET || 'your-secret-key',
         expiresIn: process.env.ACCESS_TOKEN_DURATION || '60m',
@@ -151,7 +151,7 @@ export class AuthService {
       })) as UserSelect | null;
 
       if (!user) {
-        throw new UnauthorizedException(ERROR_MESSAGES.REFRESH_TOKEN_INVALID);
+        throw new UnauthorizedException('REFRESH_TOKEN_INVALID');
       }
 
       const accessToken = this.generateAccessToken(user.id);

@@ -49,3 +49,11 @@ export const invalidPasswords = [
   ['password without digits', 'nodigitsss'],
   ...invalidFormats,
 ];
+
+export const invalidTokens = [
+  ['invalid token format','invalid.format.attempt'],
+  ['valid format but modified data','modifiedTokenzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3NTgyMTM5MTMsImV4cCI6MTc1ODIxNzUxM30.JKYT6JLihEUsuGhrxpCIh1mX7cBqeTVDaO72YaLQlQQ'],
+  ...invalidFormats
+]
+
+export const expiredToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3NTgyMTM5MTMsImV4cCI6MTc1ODIxNzUxM30.JKYT6JLihEUsuGhrxpCIh1mX7cBqeTVDaO72YaLQlQQ';

@@ -5,6 +5,7 @@ import { AppModule } from '@src/app.module';
 import { PrismaService } from '@prisma-module/prisma.service';
 import { ValidationExceptionFilter } from '@common/filters/validation-exception.filter';
 import { AuthExceptionFilter } from '@common/filters/auth-exception.filter';
+import cookieParser from 'cookie-parser';
 
 let app: INestApplication<Server>;
 let prisma: PrismaService;
@@ -15,6 +16,7 @@ beforeAll(async () => {
   }).compile();
 
   app = moduleRef.createNestApplication();
+  app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

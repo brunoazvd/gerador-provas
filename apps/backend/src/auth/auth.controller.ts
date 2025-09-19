@@ -80,10 +80,10 @@ export class AuthController {
     @Query('includeUser') includeUser?: string,
   ): Promise<RefreshResponseDto> {
     const refreshToken = req.cookies?.refreshToken;
-
     if (!refreshToken) {
-      throw new UnauthorizedException(ERROR_MESSAGES.REFRESH_TOKEN_NOT_FOUND);
+      throw new UnauthorizedException('REFRESH_TOKEN_NOT_FOUND');
     }
+
     const result = await this.authService.refreshAccessToken(
       refreshToken,
       includeUser === 'true',
