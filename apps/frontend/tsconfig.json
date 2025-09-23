@@ -10,6 +10,7 @@
       "@/*": ["./src/*"],
       "@assets/*": ["./src/assets/*"], 
       "@components/*": ["./src/components/*"],
+      "@shadcn/*": ["./src/components/ui/*"],
       "@context/*": ["./src/context/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@lib/*": ["./src/lib/*"],

@@ -11,6 +11,7 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
       "@assets": path.resolve(__dirname, "./src/assets"),
       "@components": path.resolve(__dirname, "./src/components"),
+      "@shadcn": path.resolve(__dirname, "./src/components/ui"),
       "@context": path.resolve(__dirname, "./src/context"),
       "@hooks": path.resolve(__dirname, "./src/hooks"),
       "@lib": path.resolve(__dirname, "./src/lib"),
