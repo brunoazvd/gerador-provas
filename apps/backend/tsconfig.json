@@ -30,7 +30,7 @@
       "@factories/*": ["./test/factories/*"],
       "@test-data/*": ["./test/data/*"],
       "@test-helpers/*": ["./test/helpers/*"],
-      "@test-types/*": ["./test/types/*"]
+      "@test-types/*": ["./test/types/*"],
     }
   }
 }
