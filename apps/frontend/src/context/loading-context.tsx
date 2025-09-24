@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
-import type { LoadingContextType } from "@types/context";
+import type { LoadingContextType } from "@app/shared";
 
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);

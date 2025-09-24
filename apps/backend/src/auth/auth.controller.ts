@@ -21,8 +21,8 @@ import { LogoutResponseDto } from './dto/logout.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { parseTimeToMs } from '../common/helpers/time-parser';
 import { CookieOptions } from 'express';
-import type { AuthenticatedRequest } from './types/auth.types';
-import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@app/shared';
+import type { AuthenticatedRequest } from '@app/shared';
+import { SUCCESS_MESSAGES } from "@app/shared";
 
 const getCookieOptions = (cookieDuration: string): CookieOptions => {
   return {

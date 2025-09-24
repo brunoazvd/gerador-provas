@@ -1,18 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-
-interface JwtPayload {
-  userId: number;
-  type: 'access' | 'refresh';
-  iat?: number;
-  exp?: number;
-}
+import type { JwtPayload } from '@app/shared';
 
 /* eslint-disable @typescript-eslint/require-await  */
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),

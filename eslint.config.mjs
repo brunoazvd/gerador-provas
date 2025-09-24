@@ -15,7 +15,7 @@ export default defineConfig([
   // 🌍 Configuração padrão para todo o monorepo
   {
     ignores: ['eslint.config.mjs'],
-    extends: [eslint.configs.recommended],
+    extends: [eslint.configs.recommended, tseslint.configs.recommended, eslintPluginPrettierRecommended],
     languageOptions: {
       globals: {
         ...globals.node,
@@ -28,7 +28,7 @@ export default defineConfig([
         project: [
           path.resolve('./apps/backend/tsconfig.json'),
           path.resolve('./apps/frontend/tsconfig.json'),
-          path.resolve('./shared/tsconfig.build.json'),
+          path.resolve('./shared/tsconfig.json'),
         ],
       },
     },
@@ -38,17 +38,11 @@ export default defineConfig([
           project: [
             path.resolve('./apps/backend/tsconfig.json'),
             path.resolve('./apps/frontend/tsconfig.json'),
-            path.resolve('./shared/tsconfig.build.json'),
+            path.resolve('./shared/tsconfig.json'),
           ],
           alwaysTryTypes: true,
         },
       },
-    },
-    rules: {
-      '@typescript-eslint/no-unsafe-call': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-floating-promises': 'warn',
-      '@typescript-eslint/no-unsafe-argument': 'warn',
     },
   },
 

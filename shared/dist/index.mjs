@@ -1,4 +1,4 @@
-// src/enums/error-messages.ts
+// src/enums/messages/error-messages.ts
 var ERROR_MESSAGES = {
   EMAIL_ALREADY_IN_USE: "Email ja\u0301 est\xE1 em uso",
   USER_NOT_FOUND: "Usu\xE1rio n\xE3o encontrado",
@@ -15,7 +15,7 @@ var ERROR_MESSAGES = {
   INVALID_NAME_FORMAT: "Nome deve ser uma string v\xE1lida."
 };
 
-// src/enums/success-messages.ts
+// src/enums/messages/success-messages.ts
 var SUCCESS_MESSAGES = {
   LOGOUT: "Logout realizado com sucesso"
 };

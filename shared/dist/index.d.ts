@@ -6,4 +6,39 @@ declare const SUCCESS_MESSAGES: {
     readonly [key: string]: string;
 };
 
-export { ERROR_MESSAGES, SUCCESS_MESSAGES };
+interface JwtPayload {
+    userId: number;
+    type: 'access' | 'refresh';
+    iat?: number;
+    exp?: number;
+}
+
+interface UserSelect {
+    id: number;
+    nome: string;
+    email: string;
+    senhaHash?: string;
+}
+
+interface AuthenticatedRequest {
+    user: {
+        userId: number;
+        type: string;
+    };
+}
+
+interface User {
+    id: number;
+    name: string;
+    email: string;
+}
+
+interface LoadingContextType {
+    isLoading: boolean;
+    setLoading: (value: boolean) => void;
+}
+interface AuthContextType {
+    user: User | null;
+}
+
+export { AuthContextType, AuthenticatedRequest, ERROR_MESSAGES, JwtPayload, LoadingContextType, SUCCESS_MESSAGES, User, UserSelect };

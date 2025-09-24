@@ -9,7 +9,7 @@ import { RegisterRequestDto } from './dto/register.dto';
 import { LoginRequestDto } from './dto/login.dto';
 import * as bcrypt from 'bcryptjs';
 import { RefreshResponseDto } from './dto/refresh.dto';
-import type { UserSelect } from './types/auth.types';
+import type { UserSelect } from '@app/shared';
 import { ERROR_MESSAGES } from '@app/shared';
 
 @Injectable()

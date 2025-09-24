@@ -4,10 +4,3 @@ export interface UserSelect {
   email: string;
   senhaHash?: string;
 }
-
-export interface AuthenticatedRequest {
-  user: {
-    userId: number;
-    type: string;
-  };
-}

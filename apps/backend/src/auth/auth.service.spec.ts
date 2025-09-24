@@ -5,7 +5,7 @@ import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import { Usuario } from '@prisma/client';
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 jest.mock('bcryptjs');
 
 describe('AuthService', () => {
