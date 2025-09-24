@@ -2,15 +2,15 @@ import {
   Injectable,
   UnauthorizedException,
   ConflictException,
-} from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '../prisma/prisma.service';
-import { RegisterRequestDto } from './dto/register.dto';
-import { LoginRequestDto } from './dto/login.dto';
-import * as bcrypt from 'bcryptjs';
-import { RefreshResponseDto } from './dto/refresh.dto';
-import type { UserSelect } from '@app/shared';
-import { ERROR_MESSAGES } from '@app/shared';
+} from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+import { PrismaService } from "../prisma/prisma.service";
+import { RegisterRequestDto } from "./dto/register.dto";
+import { LoginRequestDto } from "./dto/login.dto";
+import * as bcrypt from "bcryptjs";
+import { RefreshResponseDto } from "./dto/refresh.dto";
+import type { UserSelect } from "@app/shared";
+import { ERROR_MESSAGES } from "@app/shared";
 
 @Injectable()
 export class AuthService {
@@ -83,14 +83,14 @@ export class AuthService {
     })) as UserSelect | null;
 
     if (!user) {
-      throw new UnauthorizedException('INVALID_CREDENTIALS');
+      throw new UnauthorizedException("INVALID_CREDENTIALS");
     }
 
     // Verify password
-    const isPasswordValid = await bcrypt.compare(senha, user.senhaHash || '');
+    const isPasswordValid = await bcrypt.compare(senha, user.senhaHash || "");
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('INVALID_CREDENTIALS');
+      throw new UnauthorizedException("INVALID_CREDENTIALS");
     }
 
     // Generate new refresh token and hash it
@@ -118,20 +118,20 @@ export class AuthService {
 
   private generateAccessToken(userId: number): string {
     return this.jwtService.sign(
-      { userId, type: 'access', timestamp: Date.now() },
+      { userId, type: "access", timestamp: Date.now() },
       {
-        secret: process.env.JWT_ACCESS_SECRET || 'your-secret-key',
-        expiresIn: process.env.ACCESS_TOKEN_DURATION || '60m',
+        secret: process.env.JWT_ACCESS_SECRET || "your-secret-key",
+        expiresIn: process.env.ACCESS_TOKEN_DURATION || "60m",
       },
     );
   }
 
   private generateRefreshToken(): string {
     return this.jwtService.sign(
-      { type: 'refresh', timestamp: Date.now() },
+      { type: "refresh", timestamp: Date.now() },
       {
-        secret: process.env.JWT_REFRESH_SECRET || 'your-secret-key',
-        expiresIn: process.env.REFRESH_TOKEN_DURATION || '7d',
+        secret: process.env.JWT_REFRESH_SECRET || "your-secret-key",
+        expiresIn: process.env.REFRESH_TOKEN_DURATION || "7d",
       },
     );
   }
@@ -151,7 +151,7 @@ export class AuthService {
       })) as UserSelect | null;
 
       if (!user) {
-        throw new UnauthorizedException('REFRESH_TOKEN_INVALID');
+        throw new UnauthorizedException("REFRESH_TOKEN_INVALID");
       }
 
       const accessToken = this.generateAccessToken(user.id);

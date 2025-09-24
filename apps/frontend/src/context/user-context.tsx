@@ -15,17 +15,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-
   return (
-    <AuthContext.Provider value={{ user }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
   );
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth deve ser usado dentro de AuthProvider");
+  if (!context)
+    throw new Error("useAuth deve ser usado dentro de AuthProvider");
   return context;
 }

@@ -10,34 +10,34 @@ import {
   Request,
   UnauthorizedException,
   Query,
-} from '@nestjs/common';
-import type { Response } from 'express';
-import { AuthService } from './auth.service';
-import { RegisterRequestDto, RegisterResponseDto } from './dto/register.dto';
-import { LoginRequestDto, LoginResponseDto } from './dto/login.dto';
-import { RefreshRequestDto, RefreshResponseDto } from './dto/refresh.dto';
-import { MeResponseDto } from './dto/me.dto';
-import { LogoutResponseDto } from './dto/logout.dto';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
-import { parseTimeToMs } from '../common/helpers/time-parser';
-import { CookieOptions } from 'express';
-import type { AuthenticatedRequest } from '@app/shared';
+} from "@nestjs/common";
+import type { Response } from "express";
+import { AuthService } from "./auth.service";
+import { RegisterRequestDto, RegisterResponseDto } from "./dto/register.dto";
+import { LoginRequestDto, LoginResponseDto } from "./dto/login.dto";
+import { RefreshRequestDto, RefreshResponseDto } from "./dto/refresh.dto";
+import { MeResponseDto } from "./dto/me.dto";
+import { LogoutResponseDto } from "./dto/logout.dto";
+import { JwtAuthGuard } from "../common/guards/jwt-auth.guard";
+import { parseTimeToMs } from "../common/helpers/time-parser";
+import { CookieOptions } from "express";
+import type { AuthenticatedRequest } from "@app/shared";
 import { SUCCESS_MESSAGES } from "@app/shared";
 
 const getCookieOptions = (cookieDuration: string): CookieOptions => {
   return {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
     maxAge: parseTimeToMs(cookieDuration),
   };
 };
 
-@Controller('auth')
+@Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('register')
+  @Post("register")
   @HttpCode(HttpStatus.CREATED)
   async register(
     @Body() registerDto: RegisterRequestDto,
@@ -45,9 +45,9 @@ export class AuthController {
   ): Promise<RegisterResponseDto> {
     const result = await this.authService.register(registerDto);
     const cookieOptions = getCookieOptions(
-      process.env.REFRESH_TOKEN_DURATION || '7d',
+      process.env.REFRESH_TOKEN_DURATION || "7d",
     );
-    res.cookie('refreshToken', result.refreshToken, cookieOptions);
+    res.cookie("refreshToken", result.refreshToken, cookieOptions);
 
     return {
       user: result.user,
@@ -55,7 +55,7 @@ export class AuthController {
     };
   }
 
-  @Post('login')
+  @Post("login")
   @HttpCode(HttpStatus.OK)
   async login(
     @Body() loginDto: LoginRequestDto,
@@ -63,9 +63,9 @@ export class AuthController {
   ): Promise<LoginResponseDto> {
     const result = await this.authService.login(loginDto);
     const cookieOptions = getCookieOptions(
-      process.env.REFRESH_TOKEN_DURATION || '7d',
+      process.env.REFRESH_TOKEN_DURATION || "7d",
     );
-    res.cookie('refreshToken', result.refreshToken, cookieOptions);
+    res.cookie("refreshToken", result.refreshToken, cookieOptions);
 
     return {
       user: result.user,
@@ -73,25 +73,25 @@ export class AuthController {
     };
   }
 
-  @Post('refresh')
+  @Post("refresh")
   @HttpCode(HttpStatus.OK)
   async refresh(
     @Request() req: RefreshRequestDto,
-    @Query('includeUser') includeUser?: string,
+    @Query("includeUser") includeUser?: string,
   ): Promise<RefreshResponseDto> {
     const refreshToken = req.cookies?.refreshToken;
     if (!refreshToken) {
-      throw new UnauthorizedException('REFRESH_TOKEN_NOT_FOUND');
+      throw new UnauthorizedException("REFRESH_TOKEN_NOT_FOUND");
     }
 
     const result = await this.authService.refreshAccessToken(
       refreshToken,
-      includeUser === 'true',
+      includeUser === "true",
     );
     return result;
   }
 
-  @Get('me')
+  @Get("me")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   async me(
@@ -102,7 +102,7 @@ export class AuthController {
     return user;
   }
 
-  @Post('logout')
+  @Post("logout")
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   async logout(
@@ -111,10 +111,10 @@ export class AuthController {
   ): Promise<LogoutResponseDto> {
     const userId = req.user.userId;
     await this.authService.logout(userId);
-    res.clearCookie('refreshToken', {
+    res.clearCookie("refreshToken", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
     });
     return { message: SUCCESS_MESSAGES.LOGOUT };
   }

@@ -1,9 +1,7 @@
-import { Navbar } from "@/components/common/navbar"
+import { Navbar } from "@/components/common/navbar";
 
 const Homepage = () => {
-  return (
-    <Navbar />
-  )
-}
+  return <Navbar />;
+};
 
-export { Homepage } 
+export { Homepage };

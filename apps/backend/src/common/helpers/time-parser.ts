@@ -2,7 +2,7 @@ export const parseTimeToMs = (duration: string): number => {
   const regex = /^(\d+)(ms|s|m|h|d|w)$/i;
   const match: RegExpMatchArray | null = duration.trim().match(regex);
   if (!match || match.length !== 3) {
-    throw new Error('Duração inválida.');
+    throw new Error("Duração inválida.");
   }
   const value = parseInt(match[1]);
   const unit = match[2].toLowerCase();

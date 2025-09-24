@@ -8,13 +8,15 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
+const ignores = ['eslint.config.mjs', 'dist', 'node_modules', 'test', '**/dist/**', '**/node_modules/**', '**/test/**', '**/*spec.ts', '**/*.d.ts'];
+
 export default defineConfig([
   // Ignorar pastas globais
-  globalIgnores(['dist', 'node_modules']),
+  globalIgnores([...ignores]),
 
   // 🌍 Configuração padrão para todo o monorepo
   {
-    ignores: ['eslint.config.mjs'],
+    ignores: [...ignores],
     extends: [eslint.configs.recommended, tseslint.configs.recommended, eslintPluginPrettierRecommended],
     languageOptions: {
       globals: {

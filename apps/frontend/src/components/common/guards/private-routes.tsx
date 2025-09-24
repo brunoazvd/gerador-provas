@@ -2,7 +2,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "@context/user-context";
 import { useLoading } from "@context/loading-context";
 
-export function PrivateRoutes() {
+export const PrivateRoutes = () => {
   const { user } = useAuth();
   const { isLoading } = useLoading();
 
@@ -15,4 +15,4 @@ export function PrivateRoutes() {
   }
 
   return <Outlet />;
-}
+};

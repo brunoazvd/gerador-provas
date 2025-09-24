@@ -1,14 +1,12 @@
-import {
-  IsString,
-  MinLength,
-  MaxLength,
-  Matches,
-} from 'class-validator';
-import { ERROR_MESSAGES } from '@app/shared';
+import { IsString, MinLength, MaxLength, Matches } from "class-validator";
+import { ERROR_MESSAGES } from "@app/shared";
 
 export class LoginRequestDto {
   @IsString({ message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT })
-  @Matches(/^(?!.*\.\.)[A-Za-z0-9](?:[A-Za-z0-9._+-]*[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z]{2,})+$/, { message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT })
+  @Matches(
+    /^(?!.*\.\.)[A-Za-z0-9](?:[A-Za-z0-9._+-]*[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z]{2,})+$/,
+    { message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT },
+  )
   email: string;
 
   @IsString({ message: ERROR_MESSAGES.INVALID_PASSWORD_FORMAT })

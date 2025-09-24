@@ -3,11 +3,8 @@ import {
   Catch,
   ArgumentsHost,
   BadRequestException,
-} from '@nestjs/common';
-import { Response } from 'express';
-
-/* eslint-disable @typescript-eslint/no-unsafe-assignment  */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access  */
+} from "@nestjs/common";
+import { Response } from "express";
 
 @Catch(BadRequestException)
 export class ValidationExceptionFilter implements ExceptionFilter {
@@ -15,14 +12,16 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
-    const exceptionResponse = exception.getResponse() as any;
+    const exceptionResponse = exception.getResponse();
+    const exceptionMessage: string =
+      typeof exceptionResponse === "string"
+        ? exceptionResponse
+        : (exceptionResponse as { message: string }).message;
 
     // Customizar formato do erro
     const errorResponse = {
-      error: 'Validation',
-      message: Array.isArray(exceptionResponse.message)
-        ? exceptionResponse.message[0]
-        : exceptionResponse.message,
+      error: "Validation",
+      message: exceptionMessage,
       statusCode: status,
     };
 

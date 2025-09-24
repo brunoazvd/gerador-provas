@@ -1,18 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import type { JwtPayload } from '@app/shared';
-
-/* eslint-disable @typescript-eslint/require-await  */
+import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { PassportStrategy } from "@nestjs/passport";
+import { ExtractJwt, Strategy } from "passport-jwt";
+import type { JwtPayload } from "@app/shared";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-
   constructor() {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: true,
-      secretOrKey: process.env.JWT_ACCESS_SECRET || 'your-access-secret',
+      secretOrKey: process.env.JWT_ACCESS_SECRET || "your-access-secret",
     });
   }
 
@@ -20,12 +17,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     // Verificar se token expirou
     const now = Math.floor(Date.now() / 1000);
     if (payload.exp && payload.exp < now) {
-      throw new UnauthorizedException('TOKEN_EXPIRED');
+      throw new UnauthorizedException("TOKEN_EXPIRED");
     }
 
     // Verificar tipo do token
-    if (payload.type !== 'access') {
-      throw new UnauthorizedException('INVALID_TOKEN_TYPE');
+    if (payload.type !== "access") {
+      throw new UnauthorizedException("INVALID_TOKEN_TYPE");
     }
     return { userId: payload.userId, type: payload.type };
   }

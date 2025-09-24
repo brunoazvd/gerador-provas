@@ -1,22 +1,23 @@
-import {
-  IsString,
-  MinLength,
-  MaxLength,
-  Matches,
-} from 'class-validator';
-import { ERROR_MESSAGES } from '@app/shared';
+import { IsString, MinLength, MaxLength, Matches } from "class-validator";
+import { ERROR_MESSAGES } from "@app/shared";
 
 export class RegisterRequestDto {
   @IsString({ message: ERROR_MESSAGES.INVALID_NAME_FORMAT })
   @MinLength(3, { message: ERROR_MESSAGES.INVALID_NAME })
   @MaxLength(32, { message: ERROR_MESSAGES.INVALID_NAME })
-  @Matches(/^(?!.*[ \-']{2})(?!.*[ \-']$)(?!^[ \-'])[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ \-'][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/, {
-    message: () => ERROR_MESSAGES.INVALID_NAME,
-  })
+  @Matches(
+    /^(?!.*[ \-']{2})(?!.*[ \-']$)(?!^[ \-'])[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ \-'][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/,
+    {
+      message: () => ERROR_MESSAGES.INVALID_NAME,
+    },
+  )
   nome: string;
 
   @IsString({ message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT })
-  @Matches(/^(?!.*\.\.)[A-Za-z0-9](?:[A-Za-z0-9._+-]*[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z]{2,})+$/, { message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT })
+  @Matches(
+    /^(?!.*\.\.)[A-Za-z0-9](?:[A-Za-z0-9._+-]*[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z]{2,})+$/,
+    { message: ERROR_MESSAGES.INVALID_EMAIL_FORMAT },
+  )
   email: string;
 
   @IsString({ message: ERROR_MESSAGES.INVALID_PASSWORD_FORMAT })

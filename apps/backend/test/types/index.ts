@@ -1,3 +1,3 @@
-import type { Response } from 'supertest';
+import type { Response } from "supertest";
 
-export type TypedResponse<T> = Omit<Response, 'body'> & { body: T };
+export type TypedResponse<T> = Omit<Response, "body"> & { body: T };

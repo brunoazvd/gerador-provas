@@ -31,6 +31,7 @@
       "@test-data/*": ["./test/data/*"],
       "@test-helpers/*": ["./test/helpers/*"],
       "@test-types/*": ["./test/types/*"],
-    }
-  }
+    },
+  },
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

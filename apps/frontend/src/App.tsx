@@ -1,13 +1,18 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Homepage } from "./pages/homepage"
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { Homepage } from "./pages/homepage";
 import { PublicOnlyRoutes } from "@components/common/guards/public-only-routes";
 import { PrivateRoutes } from "@components/common/guards/private-routes";
 
 function App() {
   return (
     <Router>
-        <div className="min-h-svh">
-      <Routes>
+      <div className="min-h-svh">
+        <Routes>
           {/* Rotas Públicas */}
           <Route path="/" element={<Homepage />} />
 
@@ -24,12 +29,10 @@ function App() {
 
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
-        </div>
+        </Routes>
+      </div>
     </Router>
-    
-    
-  )
+  );
 }
 
-export default App
+export default App;
