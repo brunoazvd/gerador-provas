@@ -1,22 +1,22 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import type { ReactNode } from "react";
 import type { User, AuthContextType } from "@app/shared";
+import { setAuthContextGetter } from "@lib/api-client";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  // Carregar sessão inicial. TODO: descobrir se existe cookie e se sim, pedir user para o backend.
-  useEffect(() => {
-    const storedUser: string | null = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser) as User);
-    }
-  }, []);
+  setAuthContextGetter(() => accessToken);
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{ user, accessToken, setUser, setAccessToken }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 }
 
