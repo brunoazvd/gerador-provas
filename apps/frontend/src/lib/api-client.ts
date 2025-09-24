@@ -8,7 +8,7 @@ export function setAuthContextGetter(fn: () => string | null) {
 
 export const api = axios.create({
   baseURL: "http://localhost:3000",
-  withCredentials: true, // importante para mandar cookies (refreshToken)
+  withCredentials: true,
 });
 
 // Interceptor para adicionar Authorization header

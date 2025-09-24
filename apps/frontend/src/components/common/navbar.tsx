@@ -8,8 +8,8 @@ import {
 export const Navbar = () => {
   return (
     <NavigationMenu>
-      <NavigationMenuList className="w-screen py-3 gap-6 shadow-lg px-4">
-        <div className="flex gap-4 w-6xl">
+      <NavigationMenuList className="w-screen py-3 gap-6 shadow-lg px-4 bg-white">
+        <div className="flex gap-4 w-4xl">
           <NavigationMenuItem>
             <NavigationMenuLink href="/" className="px-6">
               Item 1

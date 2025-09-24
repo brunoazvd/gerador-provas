@@ -5,6 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Homepage } from "@pages/homepage";
+import { Login } from "@pages/login";
 import { PublicOnlyRoutes } from "@components/common/guards/public-only-routes";
 import { PrivateRoutes } from "@components/common/guards/private-routes";
 
@@ -23,7 +24,7 @@ export const AppRouter = () => {
 
           {/* Rotas Public-Only */}
           <Route element={<PublicOnlyRoutes />}>
-            <Route path="/login" element={<p>Login</p>} />
+            <Route path="/login" element={<Login />} />
             <Route path="/register" element={<p>Register</p>} />
           </Route>
 

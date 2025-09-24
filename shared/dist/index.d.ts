@@ -8,7 +8,7 @@ declare const SUCCESS_MESSAGES: {
 
 interface JwtPayload {
     userId: number;
-    type: 'access' | 'refresh';
+    type: "access" | "refresh";
     iat?: number;
     exp?: number;
 }
@@ -39,6 +39,9 @@ interface LoadingContextType {
 }
 interface AuthContextType {
     user: User | null;
+    accessToken: string | null;
+    setUser: (user: User | null) => void;
+    setAccessToken: (token: string | null) => void;
 }
 
 export { AuthContextType, AuthenticatedRequest, ERROR_MESSAGES, JwtPayload, LoadingContextType, SUCCESS_MESSAGES, User, UserSelect };
