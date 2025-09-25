@@ -3,7 +3,7 @@ import { Navbar } from "./navbar";
 import { Footer } from "./footer";
 export const PageWrapper = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="min-h-svh bg-accent flex flex-col">
+    <div className="min-h-svh bg-gradient-to-b from-primary/40 to-accent flex flex-col">
       <div className="flex flex-col h-full">
         <Navbar />
         <main className="py-12 flex-1">{children}</main>

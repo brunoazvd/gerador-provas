@@ -1,6 +1,5 @@
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -10,18 +9,31 @@ import {
 import { Button } from "@shadcn/button";
 import { Input } from "@shadcn/input";
 import { Label } from "@shadcn/label";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { login } from "@api/auth";
+import { useAuth } from "@context/auth-context";
 
 export const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [senha, setSenha] = useState<string>("");
+  const { setUser, setAccessToken } = useAuth();
 
-  console.log(email);
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    try {
+      const data = await login(email, senha);
+      console.log(data);
+      setUser(data.user);
+      setAccessToken(data.accessToken);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Card className="max-w-sm w-full mx-auto">
           <CardHeader>
             <CardTitle>Entrar</CardTitle>
