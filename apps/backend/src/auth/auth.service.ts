@@ -5,11 +5,9 @@ import {
 } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "../prisma/prisma.service";
-import { RegisterRequestDto } from "./dto/register.dto";
-import { LoginRequestDto } from "./dto/login.dto";
+import { RegisterRequestDto, LoginRequestDto } from "./dto/auth.dto";
 import * as bcrypt from "bcryptjs";
-import { RefreshResponseDto } from "./dto/refresh.dto";
-import type { UserSelect } from "@app/shared";
+import type { UserSelect, RefreshTokenResponse } from "@app/shared";
 import { ERROR_MESSAGES } from "@app/shared";
 
 @Injectable()
@@ -139,7 +137,7 @@ export class AuthService {
   async refreshAccessToken(
     refreshToken: string,
     includeUser = false,
-  ): Promise<RefreshResponseDto> {
+  ): Promise<RefreshTokenResponse> {
     try {
       const user = (await this.prisma.usuario.findUnique({
         where: { refreshTokenHash: refreshToken },

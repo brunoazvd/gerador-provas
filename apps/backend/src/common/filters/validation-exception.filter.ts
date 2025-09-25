@@ -5,6 +5,13 @@ import {
   BadRequestException,
 } from "@nestjs/common";
 import { Response } from "express";
+import { ZodIssue } from "zod";
+
+interface ZodErrorResponse {
+  statusCode: number;
+  message: string;
+  errors: ZodIssue[];
+}
 
 @Catch(BadRequestException)
 export class ValidationExceptionFilter implements ExceptionFilter {
@@ -13,10 +20,14 @@ export class ValidationExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
     const exceptionResponse = exception.getResponse();
-    const exceptionMessage: string =
-      typeof exceptionResponse === "string"
-        ? exceptionResponse
-        : (exceptionResponse as { message: string }).message;
+    let exceptionMessage: string = "";
+
+    if (typeof exceptionResponse === "string") {
+      exceptionMessage = exceptionResponse;
+    } else if (typeof exceptionResponse === "object") {
+      exceptionMessage = (exceptionResponse as ZodErrorResponse).errors[0]
+        .message;
+    }
 
     // Customizar formato do erro
     const errorResponse = {

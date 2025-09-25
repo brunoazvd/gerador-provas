@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from "@nestjs/common";
+import { INestApplication } from "@nestjs/common";
 import { Test } from "@nestjs/testing";
 import { Server } from "http";
 import { AppModule } from "@src/app.module";
@@ -17,13 +17,7 @@ beforeAll(async () => {
 
   app = moduleRef.createNestApplication();
   app.use(cookieParser());
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-    }),
-  );
+
   app.useGlobalFilters(
     new ValidationExceptionFilter(),
     new AuthExceptionFilter(),

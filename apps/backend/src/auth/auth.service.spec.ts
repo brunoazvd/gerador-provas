@@ -175,7 +175,7 @@ describe("AuthService", () => {
         },
       );
       expect(jest.spyOn(jwtService, "sign")).toHaveBeenCalledWith(
-        { userId: 1, type: "access" },
+        { timestamp: expect.any(Number), type: "access", userId: 1 },
         {
           secret: process.env.JWT_ACCESS_SECRET,
           expiresIn: process.env.ACCESS_TOKEN_DURATION,

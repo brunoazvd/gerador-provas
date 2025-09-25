@@ -5,6 +5,10 @@ export interface AuthResponse {
   accessToken: string;
 }
 
+export interface LogoutResponse {
+  message: string;
+}
+
 export interface LoginRequest {
   email: string;
   senha: string;

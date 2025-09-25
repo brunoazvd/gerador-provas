@@ -1,3 +1,5 @@
+import { z } from 'zod';
+
 declare const ERROR_MESSAGES: {
     readonly [key: string]: string;
 };
@@ -34,6 +36,9 @@ interface AuthResponse {
     user: User;
     accessToken: string;
 }
+interface LogoutResponse {
+    message: string;
+}
 interface LoginRequest {
     email: string;
     senha: string;
@@ -65,4 +70,14 @@ interface AuthContextType {
     setAccessToken: (token: string | null) => void;
 }
 
-export { AuthContextType, AuthResponse, AuthenticatedRequest, ERROR_MESSAGES, INPUT_PLACEHOLDERS, JwtPayload, LoadingContextType, LoginRequest, RefreshTokenResponse, RegisterRequest, SUCCESS_MESSAGES, User, UserSelect };
+declare const loginSchema: z.ZodObject<{
+    email: z.ZodString;
+    senha: z.ZodString;
+}, z.core.$strip>;
+declare const registerSchema: z.ZodObject<{
+    email: z.ZodString;
+    senha: z.ZodString;
+    nome: z.ZodString;
+}, z.core.$strip>;
+
+export { AuthContextType, AuthResponse, AuthenticatedRequest, ERROR_MESSAGES, INPUT_PLACEHOLDERS, JwtPayload, LoadingContextType, LoginRequest, LogoutResponse, RefreshTokenResponse, RegisterRequest, SUCCESS_MESSAGES, User, UserSelect, loginSchema, registerSchema };
