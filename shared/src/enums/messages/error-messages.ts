@@ -14,4 +14,5 @@ export const ERROR_MESSAGES: { readonly [key: string]: string } = {
   INVALID_NAME:
     "Nome deve ter entre 3 e 32 caracteres e conter apenas letras e espaços.",
   INVALID_NAME_FORMAT: "Nome deve ser uma string válida.",
+  PASSWORD_DO_NOT_MATCH: "As senhas não coincidem.",
 };

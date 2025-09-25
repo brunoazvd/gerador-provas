@@ -3,7 +3,9 @@ import { createZodDto } from "nestjs-zod";
 
 export class LoginRequestDto extends createZodDto(loginSchema) {}
 
-export class RegisterRequestDto extends createZodDto(registerSchema) {}
+export class RegisterRequestDto extends createZodDto(
+  registerSchema.omit({ confirmarSenha: true }),
+) {}
 
 export class RefreshRequestDto {
   cookies: {

@@ -12,7 +12,8 @@ var ERROR_MESSAGES = {
   INVALID_PASSWORD: "Senha deve ter entre 8 e 64 caracteres e conter pelo menos um d\xEDgito e uma letra mai\xFAscula.",
   INVALID_PASSWORD_FORMAT: "Senha deve ser uma string v\xE1lida.",
   INVALID_NAME: "Nome deve ter entre 3 e 32 caracteres e conter apenas letras e espa\xE7os.",
-  INVALID_NAME_FORMAT: "Nome deve ser uma string v\xE1lida."
+  INVALID_NAME_FORMAT: "Nome deve ser uma string v\xE1lida.",
+  PASSWORD_DO_NOT_MATCH: "As senhas n\xE3o coincidem."
 };
 
 // src/enums/messages/success-messages.ts
@@ -23,6 +24,7 @@ var SUCCESS_MESSAGES = {
 // src/enums/placeholders/input-field.ts
 var INPUT_PLACEHOLDERS = {
   SENHA: "Digite sua senha...",
+  SENHA_CONFIRM: "Confirme sua senha...",
   EMAIL: "Digite seu email...",
   NOME: "Digite seu nome..."
 };
@@ -48,10 +50,17 @@ var registerSchema = z.object({
     /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])\S{8,64}$/,
     ERROR_MESSAGES.INVALID_PASSWORD
   ),
+  confirmarSenha: z.string(ERROR_MESSAGES.INVALID_PASSWORD_FORMAT).min(8, ERROR_MESSAGES.INVALID_PASSWORD).max(64, ERROR_MESSAGES.INVALID_PASSWORD).regex(
+    /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])\S{8,64}$/,
+    ERROR_MESSAGES.INVALID_PASSWORD
+  ),
   nome: z.string(ERROR_MESSAGES.INVALID_NAME_FORMAT).min(3, ERROR_MESSAGES.INVALID_NAME).max(32, ERROR_MESSAGES.INVALID_NAME).regex(
     /^(?!.*[ \-']{2})(?!.*[ \-']$)(?!^[ \-'])[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ \-'][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/,
     ERROR_MESSAGES.INVALID_NAME
   )
+}).refine((data) => data.senha === data.confirmarSenha, {
+  message: ERROR_MESSAGES.PASSWORDS_DO_NOT_MATCH,
+  path: ["confirmarSenha"]
 });
 export {
   ERROR_MESSAGES,

@@ -59,6 +59,13 @@ interface RefreshTokenResponse {
     accessToken: string;
 }
 
+interface RegisterRequestForm {
+    email: string;
+    nome: string;
+    senha: string;
+    confirmarSenha: string;
+}
+
 interface LoadingContextType {
     isLoading: boolean;
     setLoading: (value: boolean) => void;
@@ -77,7 +84,8 @@ declare const loginSchema: z.ZodObject<{
 declare const registerSchema: z.ZodObject<{
     email: z.ZodString;
     senha: z.ZodString;
+    confirmarSenha: z.ZodString;
     nome: z.ZodString;
 }, z.core.$strip>;
 
-export { AuthContextType, AuthResponse, AuthenticatedRequest, ERROR_MESSAGES, INPUT_PLACEHOLDERS, JwtPayload, LoadingContextType, LoginRequest, LogoutResponse, RefreshTokenResponse, RegisterRequest, SUCCESS_MESSAGES, User, UserSelect, loginSchema, registerSchema };
+export { AuthContextType, AuthResponse, AuthenticatedRequest, ERROR_MESSAGES, INPUT_PLACEHOLDERS, JwtPayload, LoadingContextType, LoginRequest, LogoutResponse, RefreshTokenResponse, RegisterRequest, RegisterRequestForm, SUCCESS_MESSAGES, User, UserSelect, loginSchema, registerSchema };
