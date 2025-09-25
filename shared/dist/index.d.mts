@@ -6,12 +6,9 @@ declare const SUCCESS_MESSAGES: {
     readonly [key: string]: string;
 };
 
-interface JwtPayload {
-    userId: number;
-    type: "access" | "refresh";
-    iat?: number;
-    exp?: number;
-}
+declare const INPUT_PLACEHOLDERS: {
+    readonly [key: string]: string;
+};
 
 interface UserSelect {
     id: number;
@@ -29,8 +26,32 @@ interface AuthenticatedRequest {
 
 interface User {
     id: number;
-    name: string;
+    nome: string;
     email: string;
+}
+
+interface AuthResponse {
+    user: User;
+    accessToken: string;
+}
+interface LoginRequest {
+    email: string;
+    senha: string;
+}
+interface RegisterRequest {
+    email: string;
+    senha: string;
+    nome: string;
+}
+interface JwtPayload {
+    userId: number;
+    type: "access" | "refresh";
+    iat?: number;
+    exp?: number;
+}
+interface RefreshTokenResponse {
+    user?: User;
+    accessToken: string;
 }
 
 interface LoadingContextType {
@@ -44,4 +65,4 @@ interface AuthContextType {
     setAccessToken: (token: string | null) => void;
 }
 
-export { AuthContextType, AuthenticatedRequest, ERROR_MESSAGES, JwtPayload, LoadingContextType, SUCCESS_MESSAGES, User, UserSelect };
+export { AuthContextType, AuthResponse, AuthenticatedRequest, ERROR_MESSAGES, INPUT_PLACEHOLDERS, JwtPayload, LoadingContextType, LoginRequest, RefreshTokenResponse, RegisterRequest, SUCCESS_MESSAGES, User, UserSelect };

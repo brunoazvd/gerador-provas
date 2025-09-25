@@ -21,6 +21,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 var src_exports = {};
 __export(src_exports, {
   ERROR_MESSAGES: () => ERROR_MESSAGES,
+  INPUT_PLACEHOLDERS: () => INPUT_PLACEHOLDERS,
   SUCCESS_MESSAGES: () => SUCCESS_MESSAGES
 });
 module.exports = __toCommonJS(src_exports);
@@ -46,8 +47,16 @@ var ERROR_MESSAGES = {
 var SUCCESS_MESSAGES = {
   LOGOUT: "Logout realizado com sucesso"
 };
+
+// src/enums/placeholders/input-field.ts
+var INPUT_PLACEHOLDERS = {
+  SENHA: "Digite sua senha...",
+  EMAIL: "Digite seu email...",
+  NOME: "Digite seu nome..."
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   ERROR_MESSAGES,
+  INPUT_PLACEHOLDERS,
   SUCCESS_MESSAGES
 });

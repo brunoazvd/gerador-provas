@@ -8,11 +8,12 @@ import { Homepage } from "@pages/homepage";
 import { Login } from "@pages/login";
 import { PublicOnlyRoutes } from "@components/common/guards/public-only-routes";
 import { PrivateRoutes } from "@components/common/guards/private-routes";
+import { PageWrapper } from "@components/common/page-wrapper";
 
 export const AppRouter = () => {
   return (
     <Router>
-      <div>
+      <PageWrapper>
         <Routes>
           {/* Rotas Públicas */}
           <Route path="/" element={<Homepage />} />
@@ -31,7 +32,7 @@ export const AppRouter = () => {
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
-      </div>
+      </PageWrapper>
     </Router>
   );
 };

@@ -1,18 +1,28 @@
 import { api } from "@lib/api-client";
-import type { User } from "@app/shared";
+import type {
+  RefreshTokenResponse,
+  AuthResponse,
+  LoginRequest,
+  RegisterRequest,
+} from "@app/shared";
 
-type LoginResponse = {
-  user: User;
-  accessToken: string;
-};
+export async function login(payload: LoginRequest): Promise<AuthResponse> {
+  const { data } = await api.post<AuthResponse>("/auth/login", payload);
+  return data;
+}
 
-export async function login(
-  email: string,
-  senha: string,
-): Promise<LoginResponse> {
-  const { data } = await api.post<LoginResponse>("/auth/login", {
-    email,
-    senha,
-  });
+export async function register(
+  payload: RegisterRequest,
+): Promise<AuthResponse> {
+  const { data } = await api.post<AuthResponse>("/auth/register", payload);
+  return data;
+}
+
+export async function refreshAccessToken(
+  includeUser: boolean = false,
+): Promise<RefreshTokenResponse> {
+  const { data } = await api.post<RefreshTokenResponse>(
+    `/auth/refresh${includeUser ? "?includeUser=true" : ""}`,
+  );
   return data;
 }

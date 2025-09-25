@@ -2,7 +2,7 @@ import { Instagram, Linkedin, Mail } from "lucide-react";
 
 export const Footer = () => {
   return (
-    <div className="bg-white mt-auto py-4">
+    <div className="bg-white mt-auto py-4 shadow-border">
       <div className="flex w-4xl mx-auto justify-between">
         <p>Desenvolvido por Bruno Azevedo</p>
         <div className="flex gap-4">

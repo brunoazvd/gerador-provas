@@ -19,7 +19,15 @@ var ERROR_MESSAGES = {
 var SUCCESS_MESSAGES = {
   LOGOUT: "Logout realizado com sucesso"
 };
+
+// src/enums/placeholders/input-field.ts
+var INPUT_PLACEHOLDERS = {
+  SENHA: "Digite sua senha...",
+  EMAIL: "Digite seu email...",
+  NOME: "Digite seu nome..."
+};
 export {
   ERROR_MESSAGES,
+  INPUT_PLACEHOLDERS,
   SUCCESS_MESSAGES
 };
