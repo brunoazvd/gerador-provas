@@ -44,7 +44,6 @@ export const LoginForm = () => {
       const data = await login(values);
       setUser(data.user);
       setAccessToken(data.accessToken);
-      toast.success("Login feito com sucesso!");
     } catch (error) {
       const errorMessage: string = (
         (error as AxiosError).response!.data! as { message: string }

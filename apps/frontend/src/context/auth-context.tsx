@@ -12,6 +12,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const { setLoading } = useLoading();
 
+  const clearAuth = () => {
+    setUser(null);
+    setAccessToken(null);
+  };
+
   setAuthContextGetter(() => accessToken);
 
   useEffect(() => {
@@ -35,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, accessToken, setUser, setAccessToken }}
+      value={{ user, accessToken, setUser, setAccessToken, clearAuth }}
     >
       {children}
     </AuthContext.Provider>

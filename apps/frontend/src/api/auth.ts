@@ -2,6 +2,7 @@ import { api } from "@lib/api-client";
 import type {
   RefreshTokenResponse,
   AuthResponse,
+  LogoutResponse,
   LoginRequest,
   RegisterRequest,
 } from "@app/shared";
@@ -24,5 +25,10 @@ export async function refreshAccessToken(
   const { data } = await api.post<RefreshTokenResponse>(
     `/auth/refresh${includeUser ? "?includeUser=true" : ""}`,
   );
+  return data;
+}
+
+export async function logout(): Promise<LogoutResponse> {
+  const { data } = await api.post("/auth/logout");
   return data;
 }

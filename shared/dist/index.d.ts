@@ -75,6 +75,7 @@ interface AuthContextType {
     accessToken: string | null;
     setUser: (user: User | null) => void;
     setAccessToken: (token: string | null) => void;
+    clearAuth: () => void;
 }
 
 declare const loginSchema: z.ZodObject<{
