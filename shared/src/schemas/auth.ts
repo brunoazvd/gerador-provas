@@ -52,6 +52,6 @@ export const registerSchema = z
       ),
   })
   .refine((data) => data.senha === data.confirmarSenha, {
-    message: ERROR_MESSAGES.PASSWORDS_DO_NOT_MATCH,
+    message: ERROR_MESSAGES.PASSWORD_DO_NOT_MATCH,
     path: ["confirmarSenha"],
   });

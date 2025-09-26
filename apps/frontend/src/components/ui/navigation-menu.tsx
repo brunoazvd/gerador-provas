@@ -5,6 +5,9 @@ import { ChevronDownIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
+import { Link as RouterLink } from "react-router-dom";
+import type { LinkProps as RouterLinkProps } from "react-router-dom";
+
 function NavigationMenu({
   className,
   children,
@@ -137,6 +140,25 @@ function NavigationMenuLink({
   );
 }
 
+// Novo componente para SPA navigation com react-router-dom
+function NavigationMenuRouterLink({
+  className,
+  children,
+  ...props
+}: RouterLinkProps & { className?: string }) {
+  return (
+    <RouterLink
+      className={cn(
+        "data-[active=true]:focus:bg-accent data-[active=true]:hover:bg-accent data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </RouterLink>
+  );
+}
+
 function NavigationMenuIndicator({
   className,
   ...props
@@ -162,6 +184,7 @@ export {
   NavigationMenuContent,
   NavigationMenuTrigger,
   NavigationMenuLink,
+  NavigationMenuRouterLink,
   NavigationMenuIndicator,
   NavigationMenuViewport,
   // eslint-disable-next-line react-refresh/only-export-components

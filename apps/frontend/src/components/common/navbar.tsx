@@ -2,9 +2,9 @@ import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
+  NavigationMenuRouterLink,
 } from "@shadcn/navigation-menu";
 import { useAuth } from "@context/auth-context";
-import { Link } from "react-router-dom";
 
 export const Navbar = () => {
   const { user } = useAuth();
@@ -13,20 +13,20 @@ export const Navbar = () => {
       <NavigationMenuList className="w-screen py-3 gap-6 px-4 bg-white">
         <div className="flex gap-4 w-4xl">
           <NavigationMenuItem>
-            <Link to="/" className="px-6">
+            <NavigationMenuRouterLink to="/" className="px-6">
               Homepage
-            </Link>
+            </NavigationMenuRouterLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <Link to="/dashboard" className="px-6">
+            <NavigationMenuRouterLink to="/dashboard" className="px-6">
               Dashboard
-            </Link>
+            </NavigationMenuRouterLink>
           </NavigationMenuItem>
           <NavigationMenuItem className="ml-auto">
             {user == null ? (
-              <Link to="/login" className="px-6">
+              <NavigationMenuRouterLink to="/login" className="px-6">
                 Login
-              </Link>
+              </NavigationMenuRouterLink>
             ) : (
               <p>Bem Vindo, {user.nome || "unknown"}</p>
             )}

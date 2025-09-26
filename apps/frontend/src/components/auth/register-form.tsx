@@ -58,12 +58,12 @@ export const RegisterForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="max-w-sm w-full mx-auto">
           <CardHeader>
-            <CardTitle>Entrar</CardTitle>
+            <CardTitle>Cadastrar</CardTitle>
             <CardDescription>
-              Insira suas credenciais abaixo e acesse sua conta
+              Entre os seus dados para cadastrar um novo usuário
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-4">
+          <CardContent className="flex flex-col gap-4 py-3">
             <FormField
               control={form.control}
               name="email"
@@ -120,7 +120,7 @@ export const RegisterForm = () => {
               name="confirmarSenha"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Senha:</FormLabel>
+                  <FormLabel>Confirmar Senha:</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
@@ -135,10 +135,10 @@ export const RegisterForm = () => {
           </CardContent>
           <CardFooter className="flex-col gap-2">
             <Button type="submit" className="w-full">
-              Entrar
+              Cadastrar
             </Button>
             <Button type="button" variant="link" className="w-full">
-              <Link to="/register">Não tem conta? Cadastre-se</Link>
+              <Link to="/login">Já tem conta? Entrar</Link>
             </Button>
           </CardFooter>
         </Card>

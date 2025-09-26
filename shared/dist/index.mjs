@@ -59,7 +59,7 @@ var registerSchema = z.object({
     ERROR_MESSAGES.INVALID_NAME
   )
 }).refine((data) => data.senha === data.confirmarSenha, {
-  message: ERROR_MESSAGES.PASSWORDS_DO_NOT_MATCH,
+  message: ERROR_MESSAGES.PASSWORD_DO_NOT_MATCH,
   path: ["confirmarSenha"]
 });
 export {
