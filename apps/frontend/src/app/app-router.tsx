@@ -10,10 +10,12 @@ import { Register } from "@pages/register";
 import { PublicOnlyRoutes } from "@components/common/guards/public-only-routes";
 import { PrivateRoutes } from "@components/common/guards/private-routes";
 import { PageWrapper } from "@components/common/page-wrapper";
+import { Toaster } from "@shadcn/sonner";
 
 export const AppRouter = () => {
   return (
     <Router>
+      <Toaster position="top-center" richColors />
       <PageWrapper>
         <Routes>
           {/* Rotas Públicas */}

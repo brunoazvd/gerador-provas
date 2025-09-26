@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@styles/index.css";
-import App from "./app";
+import "@styles/bubblegum.css";
+import App from "./App";
 import { AuthProvider } from "./context/auth-context";
 import { LoadingProvider } from "./context/loading-context";
 

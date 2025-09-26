@@ -140,7 +140,6 @@ function NavigationMenuLink({
   );
 }
 
-// Novo componente para SPA navigation com react-router-dom
 function NavigationMenuRouterLink({
   className,
   children,

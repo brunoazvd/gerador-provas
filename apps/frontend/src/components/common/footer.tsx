@@ -6,13 +6,25 @@ export const Footer = () => {
       <div className="flex w-4xl mx-auto justify-between">
         <p>Desenvolvido por Bruno Azevedo</p>
         <div className="flex gap-4">
-          <a href="https://www.instagram.com/azvd.bruno" target="_blank">
+          <a
+            href="https://www.instagram.com/azvd.bruno"
+            target="_blank"
+            className="hover:text-primary"
+          >
             <Instagram />
           </a>
-          <a href="https://www.linkedin.com/in/brunoazvdo/" target="_blank">
+          <a
+            href="https://www.linkedin.com/in/brunoazvdo/"
+            target="_blank"
+            className="hover:text-primary"
+          >
             <Linkedin />
           </a>
-          <a href="mailto:brunoazvd@protonmail.com" target="_blank">
+          <a
+            href="mailto:brunoazvd@protonmail.com"
+            target="_blank"
+            className="hover:text-primary"
+          >
             <Mail />
           </a>
         </div>

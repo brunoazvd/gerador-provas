@@ -26,6 +26,8 @@ import { Input } from "@shadcn/input";
 import { Link } from "react-router-dom";
 import { register } from "@api/auth";
 import { useAuth } from "@context/auth-context";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 export const RegisterForm = () => {
   const { setUser, setAccessToken } = useAuth();
@@ -48,17 +50,21 @@ export const RegisterForm = () => {
       });
       setUser(data.user);
       setAccessToken(data.accessToken);
+      toast.success("Usuário criado com sucesso!");
     } catch (error) {
-      console.log(error);
+      const errorMessage: string = (
+        (error as AxiosError).response!.data! as { message: string }
+      ).message;
+      toast.error(errorMessage);
     }
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className="max-w-sm w-full mx-auto">
+        <Card className="max-w-md w-full mx-auto">
           <CardHeader>
-            <CardTitle>Cadastrar</CardTitle>
+            <CardTitle className="font-bold text-xl">Cadastrar</CardTitle>
             <CardDescription>
               Entre os seus dados para cadastrar um novo usuário
             </CardDescription>

@@ -5,8 +5,8 @@
 	"tsx": true,
 	"tailwind": {
 		"config": "",
-		"css": "src/styles/index.css",
-		"baseColor": "zinc",
+		"css": "src/styles/bubblegum.css",
+		"baseColor": "stone",
 		"cssVariables": true,
 		"prefix": ""
 	},

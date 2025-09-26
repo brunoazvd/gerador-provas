@@ -26,6 +26,8 @@ import { Input } from "@shadcn/input";
 import { Link } from "react-router-dom";
 import { login } from "@api/auth";
 import { useAuth } from "@context/auth-context";
+import { toast } from "sonner";
+import type { AxiosError } from "axios";
 
 export const LoginForm = () => {
   const { setUser, setAccessToken } = useAuth();
@@ -42,17 +44,21 @@ export const LoginForm = () => {
       const data = await login(values);
       setUser(data.user);
       setAccessToken(data.accessToken);
+      toast.success("Login feito com sucesso!");
     } catch (error) {
-      console.log(error);
+      const errorMessage: string = (
+        (error as AxiosError).response!.data! as { message: string }
+      ).message;
+      toast.error(errorMessage);
     }
   };
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <Card className="max-w-sm w-full mx-auto">
+        <Card className="max-w-md w-full mx-auto">
           <CardHeader>
-            <CardTitle>Entrar</CardTitle>
+            <CardTitle className="font-bold text-xl">Entrar</CardTitle>
             <CardDescription>
               Insira suas credenciais abaixo e acesse sua conta
             </CardDescription>
