@@ -10,6 +10,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
   const { setLoading } = useLoading();
 
   const clearAuth = () => {
@@ -23,15 +24,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const tryRefreshToken = async () => {
       setLoading(true);
       try {
-        const { user, accessToken } = await refreshAccessToken(true);
-        setUser(user ?? null);
-        setAccessToken(accessToken ?? null);
+        const res = await refreshAccessToken(true);
+        setUser(res?.user ?? null);
+        setAccessToken(res?.accessToken ?? null);
       } catch {
         setUser(null);
         setAccessToken(null);
       } finally {
         setTimeout(() => {
           setLoading(false);
+          setAuthLoading(false);
         }, 1000);
       }
     };
@@ -40,7 +42,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, accessToken, setUser, setAccessToken, clearAuth }}
+      value={{
+        user,
+        accessToken,
+        authLoading,
+        setUser,
+        setAccessToken,
+        clearAuth,
+      }}
     >
       {children}
     </AuthContext.Provider>

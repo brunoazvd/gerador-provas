@@ -8,6 +8,8 @@ export interface LoadingContextType {
 export interface AuthContextType {
   user: User | null;
   accessToken: string | null;
+  authLoading: boolean;
+  clearAuth: () => void;
   setUser: (user: User | null) => void;
   setAccessToken: (token: string | null) => void;
 }
