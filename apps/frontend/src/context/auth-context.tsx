@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { User, AuthContextType } from "@app/shared";
-import { setAuthContextGetter } from "@lib/api-client";
+import { setAccessTokenGetter, setAccessTokenSetter } from "@lib/api-client";
 import { refreshAccessToken } from "@api/auth";
 import { useLoading } from "./loading-context";
 
@@ -18,7 +18,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAccessToken(null);
   };
 
-  setAuthContextGetter(() => accessToken);
+  setAccessTokenGetter(() => accessToken);
+  setAccessTokenSetter((token: string) => {
+    setAccessToken(token);
+  });
 
   useEffect(() => {
     const tryRefreshToken = async () => {
