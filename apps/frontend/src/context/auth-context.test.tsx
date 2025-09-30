@@ -1,8 +1,3 @@
-/*
-8. Auth loading
-  Verificar se o valor de authLoading muda conforme esperado (se houver lógica para isso).
-*/
-
 import "@testing-library/jest-dom";
 import { renderHook, act } from "@testing-library/react";
 import { AuthProvider, useAuth } from "./auth-context";
@@ -134,7 +129,7 @@ describe("AuthContext", () => {
       </LoadingProvider>
     );
 
-    renderHook(() => useAuth(), { wrapper: newWrapper });
+    await act(async () => renderHook(() => useAuth(), { wrapper: newWrapper }));
 
     expect(setAccessTokenGetterMock).toHaveBeenCalled();
     expect(setAccessTokenSetterMock).toHaveBeenCalled();
