@@ -57,8 +57,10 @@ export const LoginForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="max-w-md w-full mx-auto">
           <CardHeader>
-            <CardTitle className="font-bold text-xl">Entrar</CardTitle>
-            <CardDescription>
+            <CardTitle className="font-bold text-xl" data-testid="form-title">
+              Entrar
+            </CardTitle>
+            <CardDescription data-testid="form-subtitle">
               Insira suas credenciais abaixo e acesse sua conta
             </CardDescription>
           </CardHeader>
@@ -69,14 +71,14 @@ export const LoginForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email:</FormLabel>
-                  <FormControl>
+                  <FormControl data-testid="email-input">
                     <Input
                       type="text"
                       placeholder={INPUT_PLACEHOLDERS.EMAIL}
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage data-testid="email-error" />
                 </FormItem>
               )}
             />
@@ -86,24 +88,30 @@ export const LoginForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Senha:</FormLabel>
-                  <FormControl>
+                  <FormControl data-testid="senha-input">
                     <Input
                       type="password"
                       placeholder={INPUT_PLACEHOLDERS.SENHA}
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage data-testid="senha-error" />
                 </FormItem>
               )}
             />
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full"
+              data-testid="submit-button"
+            >
               Entrar
             </Button>
             <Button type="button" variant="link" className="w-full">
-              <Link to="/register">Não tem conta? Cadastre-se</Link>
+              <Link to="/register" data-testid="register-link">
+                Não tem conta? Cadastre-se
+              </Link>
             </Button>
           </CardFooter>
         </Card>

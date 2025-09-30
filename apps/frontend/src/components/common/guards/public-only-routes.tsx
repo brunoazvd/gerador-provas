@@ -11,5 +11,5 @@ export const PublicOnlyRoutes = () => {
 
   if (user) return <Navigate to="/dashboard" replace />;
 
-  return <Outlet />;
+  return <Outlet data-testid="outlet" />;
 };

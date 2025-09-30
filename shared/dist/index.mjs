@@ -13,7 +13,8 @@ var ERROR_MESSAGES = {
   INVALID_PASSWORD_FORMAT: "Senha deve ser uma string v\xE1lida.",
   INVALID_NAME: "Nome deve ter entre 3 e 32 caracteres e conter apenas letras e espa\xE7os.",
   INVALID_NAME_FORMAT: "Nome deve ser uma string v\xE1lida.",
-  PASSWORD_DO_NOT_MATCH: "As senhas n\xE3o coincidem."
+  PASSWORD_DO_NOT_MATCH: "As senhas n\xE3o coincidem.",
+  REQUIRED_FIELD: "Este campo \xE9 obrigat\xF3rio."
 };
 
 // src/enums/messages/success-messages.ts
@@ -32,29 +33,29 @@ var INPUT_PLACEHOLDERS = {
 // src/schemas/auth.ts
 import { z } from "zod";
 var loginSchema = z.object({
-  email: z.string(ERROR_MESSAGES.INVALID_EMAIL_FORMAT).regex(
+  email: z.string(ERROR_MESSAGES.INVALID_EMAIL_FORMAT).min(1, ERROR_MESSAGES.REQUIRED_FIELD).regex(
     /^(?!.*\.\.)[A-Za-z0-9](?:[A-Za-z0-9._+-]*[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z]{2,})+$/,
     ERROR_MESSAGES.INVALID_EMAIL_FORMAT
   ),
-  senha: z.string(ERROR_MESSAGES.INVALID_PASSWORD_FORMAT).min(8, ERROR_MESSAGES.INVALID_PASSWORD).max(64, ERROR_MESSAGES.INVALID_PASSWORD).regex(
+  senha: z.string(ERROR_MESSAGES.INVALID_PASSWORD_FORMAT).min(1, ERROR_MESSAGES.REQUIRED_FIELD).min(8, ERROR_MESSAGES.INVALID_PASSWORD).max(64, ERROR_MESSAGES.INVALID_PASSWORD).regex(
     /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])\S{8,64}$/,
     ERROR_MESSAGES.INVALID_PASSWORD
   )
 });
 var registerSchema = z.object({
-  email: z.string(ERROR_MESSAGES.INVALID_EMAIL_FORMAT).regex(
+  email: z.string(ERROR_MESSAGES.INVALID_EMAIL_FORMAT).min(1, ERROR_MESSAGES.REQUIRED_FIELD).regex(
     /^(?!.*\.\.)[A-Za-z0-9](?:[A-Za-z0-9._+-]*[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z]{2,})+$/,
     ERROR_MESSAGES.INVALID_EMAIL_FORMAT
   ),
-  senha: z.string(ERROR_MESSAGES.INVALID_PASSWORD_FORMAT).min(8, ERROR_MESSAGES.INVALID_PASSWORD).max(64, ERROR_MESSAGES.INVALID_PASSWORD).regex(
+  senha: z.string(ERROR_MESSAGES.INVALID_PASSWORD_FORMAT).min(1, ERROR_MESSAGES.REQUIRED_FIELD).min(8, ERROR_MESSAGES.INVALID_PASSWORD).max(64, ERROR_MESSAGES.INVALID_PASSWORD).regex(
     /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])\S{8,64}$/,
     ERROR_MESSAGES.INVALID_PASSWORD
   ),
-  confirmarSenha: z.string(ERROR_MESSAGES.INVALID_PASSWORD_FORMAT).min(8, ERROR_MESSAGES.INVALID_PASSWORD).max(64, ERROR_MESSAGES.INVALID_PASSWORD).regex(
+  confirmarSenha: z.string(ERROR_MESSAGES.INVALID_PASSWORD_FORMAT).min(1, ERROR_MESSAGES.REQUIRED_FIELD).min(8, ERROR_MESSAGES.INVALID_PASSWORD).max(64, ERROR_MESSAGES.INVALID_PASSWORD).regex(
     /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])\S{8,64}$/,
     ERROR_MESSAGES.INVALID_PASSWORD
   ),
-  nome: z.string(ERROR_MESSAGES.INVALID_NAME_FORMAT).min(3, ERROR_MESSAGES.INVALID_NAME).max(32, ERROR_MESSAGES.INVALID_NAME).regex(
+  nome: z.string(ERROR_MESSAGES.INVALID_NAME_FORMAT).min(1, ERROR_MESSAGES.REQUIRED_FIELD).min(3, ERROR_MESSAGES.INVALID_NAME).max(32, ERROR_MESSAGES.INVALID_NAME).regex(
     /^(?!.*[ \-']{2})(?!.*[ \-']$)(?!^[ \-'])[A-Za-zÀ-ÖØ-öø-ÿ]+(?:[ \-'][A-Za-zÀ-ÖØ-öø-ÿ]+)*$/,
     ERROR_MESSAGES.INVALID_NAME
   )
