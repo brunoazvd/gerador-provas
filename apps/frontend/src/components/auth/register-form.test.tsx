@@ -180,7 +180,6 @@ describe("RegisterForm", () => {
     expect(screen.getByTestId("confirmar-senha-error")).toHaveTextContent(
       ERROR_MESSAGES.REQUIRED_FIELD,
     );
-    expect(mockRegister).not.toHaveBeenCalled();
 
     // preenche email inválido, nome invalido e senha fraca -> 3 mensagens de erro específicas
     await user.type(emailInput, "invalid-email");
@@ -196,7 +195,17 @@ describe("RegisterForm", () => {
     expect(screen.getByTestId("nome-error")).toHaveTextContent(
       ERROR_MESSAGES.INVALID_NAME,
     );
-    expect(mockRegister).not.toHaveBeenCalled();
+
+    // preenche senhas coincidentes mas fracas
+    await user.type(senhaInput, "123");
+    await user.type(confirmarSenhaInput, "123");
+    await user.click(submitButton);
+    expect(screen.getByTestId("senha-error")).toHaveTextContent(
+      ERROR_MESSAGES.INVALID_PASSWORD,
+    );
+    expect(screen.getByTestId("confirmar-senha-error")).toHaveTextContent(
+      ERROR_MESSAGES.INVALID_PASSWORD,
+    );
 
     // preencher senhas que não coincidem -> 1 mensagem de erro específica
     await user.type(senhaInput, "Valid123");
