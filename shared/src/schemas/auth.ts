@@ -4,12 +4,14 @@ import { ERROR_MESSAGES } from "../enums";
 export const loginSchema = z.object({
   email: z
     .string(ERROR_MESSAGES.INVALID_EMAIL_FORMAT)
+    .min(1, ERROR_MESSAGES.REQUIRED_FIELD)
     .regex(
       /^(?!.*\.\.)[A-Za-z0-9](?:[A-Za-z0-9._+-]*[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z]{2,})+$/,
       ERROR_MESSAGES.INVALID_EMAIL_FORMAT,
     ),
   senha: z
     .string(ERROR_MESSAGES.INVALID_PASSWORD_FORMAT)
+    .min(1, ERROR_MESSAGES.REQUIRED_FIELD)
     .min(8, ERROR_MESSAGES.INVALID_PASSWORD)
     .max(64, ERROR_MESSAGES.INVALID_PASSWORD)
     .regex(
@@ -22,12 +24,14 @@ export const registerSchema = z
   .object({
     email: z
       .string(ERROR_MESSAGES.INVALID_EMAIL_FORMAT)
+      .min(1, ERROR_MESSAGES.REQUIRED_FIELD)
       .regex(
         /^(?!.*\.\.)[A-Za-z0-9](?:[A-Za-z0-9._+-]*[A-Za-z0-9])?@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?(?:\.[A-Za-z]{2,})+$/,
         ERROR_MESSAGES.INVALID_EMAIL_FORMAT,
       ),
     senha: z
       .string(ERROR_MESSAGES.INVALID_PASSWORD_FORMAT)
+      .min(1, ERROR_MESSAGES.REQUIRED_FIELD)
       .min(8, ERROR_MESSAGES.INVALID_PASSWORD)
       .max(64, ERROR_MESSAGES.INVALID_PASSWORD)
       .regex(
@@ -36,6 +40,7 @@ export const registerSchema = z
       ),
     confirmarSenha: z
       .string(ERROR_MESSAGES.INVALID_PASSWORD_FORMAT)
+      .min(1, ERROR_MESSAGES.REQUIRED_FIELD)
       .min(8, ERROR_MESSAGES.INVALID_PASSWORD)
       .max(64, ERROR_MESSAGES.INVALID_PASSWORD)
       .regex(
@@ -44,6 +49,7 @@ export const registerSchema = z
       ),
     nome: z
       .string(ERROR_MESSAGES.INVALID_NAME_FORMAT)
+      .min(1, ERROR_MESSAGES.REQUIRED_FIELD)
       .min(3, ERROR_MESSAGES.INVALID_NAME)
       .max(32, ERROR_MESSAGES.INVALID_NAME)
       .regex(

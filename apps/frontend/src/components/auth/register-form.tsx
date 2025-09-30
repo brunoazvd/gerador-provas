@@ -64,8 +64,10 @@ export const RegisterForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Card className="max-w-md w-full mx-auto">
           <CardHeader>
-            <CardTitle className="font-bold text-xl">Cadastrar</CardTitle>
-            <CardDescription>
+            <CardTitle className="font-bold text-xl" data-testid="form-title">
+              Cadastrar
+            </CardTitle>
+            <CardDescription data-testid="form-subtitle">
               Entre os seus dados para cadastrar um novo usuário
             </CardDescription>
           </CardHeader>
@@ -76,14 +78,14 @@ export const RegisterForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Email:</FormLabel>
-                  <FormControl>
+                  <FormControl data-testid="email-input">
                     <Input
                       type="text"
                       placeholder={INPUT_PLACEHOLDERS.EMAIL}
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage data-testid="email-error" />
                 </FormItem>
               )}
             />
@@ -93,14 +95,14 @@ export const RegisterForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Nome:</FormLabel>
-                  <FormControl>
+                  <FormControl data-testid="nome-input">
                     <Input
                       type="text"
                       placeholder={INPUT_PLACEHOLDERS.NOME}
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage data-testid="nome-error" />
                 </FormItem>
               )}
             />
@@ -110,14 +112,14 @@ export const RegisterForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Senha:</FormLabel>
-                  <FormControl>
+                  <FormControl data-testid="senha-input">
                     <Input
                       type="password"
                       placeholder={INPUT_PLACEHOLDERS.SENHA}
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage data-testid="senha-error" />
                 </FormItem>
               )}
             />
@@ -127,24 +129,30 @@ export const RegisterForm = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Confirmar Senha:</FormLabel>
-                  <FormControl>
+                  <FormControl data-testid="confirmar-senha-input">
                     <Input
                       type="password"
                       placeholder={INPUT_PLACEHOLDERS.SENHA_CONFIRM}
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage data-testid="confirmar-senha-error" />
                 </FormItem>
               )}
             />
           </CardContent>
           <CardFooter className="flex-col gap-2">
-            <Button type="submit" className="w-full">
+            <Button
+              type="submit"
+              className="w-full"
+              data-testid="submit-button"
+            >
               Cadastrar
             </Button>
             <Button type="button" variant="link" className="w-full">
-              <Link to="/login">Já tem conta? Entrar</Link>
+              <Link to="/login" data-testid="login-link">
+                Já tem conta? Entrar
+              </Link>
             </Button>
           </CardFooter>
         </Card>

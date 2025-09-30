@@ -44,6 +44,7 @@ describe("Navbar", () => {
 
   it("Mostra o botão 'Sair' quando user existe, clicar nesse botão invoca clearAuth", async () => {
     const clearAuthMock = vi.fn();
+    const toastErrorMock = vi.fn();
     const user = userEvent.setup();
     vi.doMock("@context/auth-context", () => ({
       useAuth: () => ({
@@ -56,6 +57,10 @@ describe("Navbar", () => {
       logout: async (): Promise<LogoutResponse> => ({
         message: "Logout realizado com sucesso",
       }),
+    }));
+
+    vi.doMock("sonner", () => ({
+      toast: { error: toastErrorMock },
     }));
 
     const { Navbar } = await import("./navbar");
